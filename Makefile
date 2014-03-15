@@ -5,8 +5,7 @@
 # email: rick@kimballsoftware.com
 # Version: 1.03 Initial version 10/21/2011
  
-#APP=core
-#APP=blinkled
+#APP=dma
 APP=ws2812
 MCU=msp430g2553
 #MCU=msp430fr5739

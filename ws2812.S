@@ -115,6 +115,14 @@ Bit6IsZero:
 	JNZ	spiTxIsrEnd
 	BIC.B	#UCB0TXIE, &IE2		; Disable UCB0-TX ISR
 spiTxIsrEnd:
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
+	NOP
 	RETI
 
 ; Configure UART (Koch) 
