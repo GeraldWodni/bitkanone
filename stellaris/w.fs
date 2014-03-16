@@ -68,8 +68,11 @@ compiletoflash
 		>rgb
 	loop ; 
 
-240 constant leds
+30 constant cols
+8 constant rows
+cols rows * constant leds
 leds 4 * constant led-buffer-size
+cols 4 * constant row-size
 led-buffer-size 
 compiletoram
 here swap allot
@@ -122,6 +125,11 @@ constant led-buffer
 		dup @ >rgb
 	loop drop ;
 
+: yflush
+	led-buffer led-buffer-size bounds do
+		i @ >rgb
+	4 +loop ;
+
 : led-n ( n-index -- a-addr ) inline
 	4 * led-buffer + ;
 
@@ -152,12 +160,13 @@ constant led-buffer
 : y $9F2F3F 1 n-leds ;
 	
 : initi
+	80mhz
 	init-ws
 	yellow
 	buffer-wh
 	line
 	$000F00 0 led-n!
-	xflush 
+	yflush 
 ;
 
 initi
