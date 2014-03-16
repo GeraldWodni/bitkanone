@@ -1,8 +1,8 @@
 rewind-w
 
 compiletoflash
+
 : row-bounds ( n -- )
-	dup .
 	row-size *      \ row offset
 	led-buffer +    \ total offset
 	row-size bounds ;
@@ -21,7 +21,18 @@ compiletoflash
 		i @ >rgb
 	-4 +loop ;
 
-\ takes about 25ms
+: rflush ( -- )
+	0 7 do
+		i row-bounds
+		i 1 and if
+			-row>rgb
+		else
+			row>rgb
+		then
+	-1 +loop
+	;
+
+\ takes about 10ms
 : rinit
 	hex
 	initi
@@ -31,15 +42,7 @@ compiletoflash
 		i .
 		i row-bounds swap . . cr
 	loop
-	off
-	8 0 do
-		i row-bounds
-	loop
-	\ send in oposing directions
-	4 0 do
-		-row>rgb
-		row>rgb
-	loop
+	rflush
 	;
 
 rinit

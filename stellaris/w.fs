@@ -162,11 +162,11 @@ constant led-buffer
 : initi
 	80mhz
 	init-ws
-	yellow
+	\ yellow
 	buffer-wh
 	line
 	$000F00 0 led-n!
-	yflush 
+	\ yflush 
 ;
 
 initi
