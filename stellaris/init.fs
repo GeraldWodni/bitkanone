@@ -74,12 +74,14 @@ decimal
 
 : systick-1Hz ( -- ) 16000000 systick ; \ Tick every second with 16 MHz clock
 
+: bounds over + swap ;
+
 : cornerstone ( Name ) ( -- )
   <builds begin here $3FF and while 0 h, repeat
   does>   begin dup  $3FF and while 2+   repeat 
           eraseflashfrom
 ;
 
-cornerstone cold
-compiletoram
-init
+\ cornerstone cold
+\ compiletoram
+\ init

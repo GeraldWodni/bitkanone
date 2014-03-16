@@ -7,7 +7,8 @@ compiletoflash
 : init-ws
     SSI_CR0_SPO SSI_CR0_SPH or
     4 2 init-ssi                ( Initialize SSI2 with 8 data bits as master )
-    2 2 2 ssi-speed          ( Slow Speed )
+    2 2 2 ssi-speed             ( Slow Speed, 16MHz )
+    \ 2 4 2 ssi-speed             ( Slow Speed, 80MHz )
     $F0 PORTB_AFSEL !           ( Associate Upper Nibble to Alternate Hardware )
     $22220000  PORTB_PCTL !     ( Specify SSI2 as Alternate Function )
     $F0 PORTB_DEN !             ( Enable Digital operation for SSI2 )
@@ -16,6 +17,7 @@ compiletoflash
     ;
 
 : >ws ( x -- )
+	ssi-wait-tx-fifo
 	8 0 do
 		$8 			\ push "0" ($8) on stack
 		over $80 and 0<> 	\ check msb
@@ -65,8 +67,6 @@ compiletoflash
 		255 i - or
 		>rgb
 	loop ; 
-
-: bounds over + swap ;
 
 240 constant leds
 leds 4 * constant led-buffer-size
@@ -147,17 +147,20 @@ constant led-buffer
 
 : xr
 	begin runner again ;
+
+: x $1F2F3F 1 n-leds ;
+: y $9F2F3F 1 n-leds ;
 	
 : initi
 	init-ws
 	yellow
 	buffer-wh
 	line
-	$00FF00 0 led-n!
+	$000F00 0 led-n!
 	xflush 
-	runner
 ;
 
 initi
+
 
 compiletoram

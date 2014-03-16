@@ -95,7 +95,9 @@ $400FE608 constant RCGCGPIO     ( GPIO Run Mode Clock Gating Control )
     r> SSI_CR0 ssi-offset ! ;
 
 : ssi-speed ( u-clock-rate u-prescaler u-ssi-number -- )
-    >r r@ SSI_CPSR ssi-offset !   ( Set Prescaler )
+    >r 				\ BR=SysClk/(CPSDVSR * (1 + SCR))
+    5 r@ SSI_CC ssi-offset !    ( Use PIOSC )
+    r@ SSI_CPSR ssi-offset !    ( Set Prescaler )
     r> SSI_CR0 ssi-offset >r    ( Store CR0-Address )
     $FF and 8 lshift            ( shift Clock-Rate to correct bits )
     r@ @ or r> ! ;              ( Set Clock-Rate in CR0 )
