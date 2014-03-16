@@ -1,7 +1,8 @@
 rewind-ssi
 
-compiletoflash
 
+
+compiletoflash
 
 : init-ws
     SSI_CR0_SPO SSI_CR0_SPH or
@@ -43,60 +44,120 @@ compiletoflash
 	loop drop ;
 
 : off 0 240 n-leds ;
-: red	  $0F0000 240 n-leds ;
-: yellow  $0F0F00 240 n-leds ;
-: green   $000F00 240 n-leds ;
-: cyan	  $000F0F 240 n-leds ;
-: blue	  $00000F 240 n-leds ;
-: magenta $0F000F 240 n-leds ;
-: white	  $0F0F0F 240 n-leds ;
+: red	  $010000 240 n-leds ;
+: yellow  $010100 240 n-leds ;
+: green   $000100 240 n-leds ;
+: cyan	  $000101 240 n-leds ;
+: blue	  $000001 240 n-leds ;
+: magenta $010001 240 n-leds ;
+: white	  $010101 240 n-leds ;
 
-\ : bill 240 0 do
-\ 		$FF0000 >rgb
-\ 		$FFFF00 >rgb
-\ 		$00FF00 >rgb
-\ 		$0000FF >rgb
-\ 		$FFFFFF >rgb
-\ 	loop ;
-\ 
-\ : x 239 0 do
-\ 		i 16 lshift
-\ 		255 i - or
-\ 		>rgb
-\ 	loop ; 
-\ 
-\ : bounds over + swap ;
-\ 
-\ 10 constant leds
-\ leds 4 * constant led-buffer-size
-\ led-buffer-size here swap allot constant led-buffer
-\ 
-\ : buffer-white
-\ 	led-buffer led-buffer-size bounds do
-\ 		$FFFFFF i !
-\ 		i .
-\ 	4 +loop ;
-\ 
-\ : buffer-blue
-\ 	led-buffer led-buffer-size bounds do
-\ 		$0000FF i !
-\ 	4 +loop ;
-\ 
-\ : buffer-off
-\ 	led-buffer led-buffer-size bounds do
-\ 		$0 i !
-\ 	4 +loop ;
-\ 
-\ : buffer.
-\ 	led-buffer led-buffer-size bounds do
-\ 		i . ." : " i @ . cr
-\ 	4 +loop ;
-\ 
-\ : flush
-\ 	led-buffer led-buffer-size bounds do
-\ 		i @ >rgb
-\ 	4 +loop ;
+: bill 240 0 do
+		$FF0000 >rgb
+		$FFFF00 >rgb
+		$00FF00 >rgb
+		$0000FF >rgb
+		$FFFFFF >rgb
+	loop ;
 
-\ hex
-\ flush
+: x 239 0 do
+		i 16 lshift
+		255 i - or
+		>rgb
+	loop ; 
 
+: bounds over + swap ;
+
+240 constant leds
+leds 4 * constant led-buffer-size
+led-buffer-size 
+compiletoram
+here swap allot
+compiletoflash
+constant led-buffer
+
+: buffer-white
+        led-buffer led-buffer-size bounds do
+                $010101 i !
+		i .
+        4 +loop ;
+
+: buffer-wh
+        led-buffer led-buffer-size bounds do
+                i 2 rshift $F and i !
+		i .
+        4 +loop ;
+
+: buffer-blue
+	led-buffer led-buffer-size bounds do
+		$000001 i !
+	4 +loop ;
+
+: buffer-off
+	led-buffer led-buffer-size bounds do
+		$0 i !
+	4 +loop ;
+
+: buffer.
+	led-buffer led-buffer-size bounds do
+		i . ." : " i @ . cr
+	4 +loop ;
+
+: flush cr
+	led-buffer led-buffer-size bounds do
+		i @ >rgb
+	4 +loop ; 
+
+: fflush
+	led-buffer
+	leds 0 do
+		dup @ >rgb
+		4 +
+	loop drop ;
+
+: xflush
+	led-buffer led-buffer-size +
+	leds 0 do
+		4 -
+		dup @ >rgb
+	loop drop ;
+
+: led-n ( n-index -- a-addr ) inline
+	4 * led-buffer + ;
+
+: led-n! ( x-color n-index -- ) inline
+	led-n ! ;
+
+: line 
+	8 0 do
+		$0F0000 i 30 * i + led-n!
+	loop ;
+
+: runner
+	led-buffer led-buffer-size 4 -
+	bounds
+	over over @ >r >r
+	do
+		i 4 + @
+		i !
+	4 +loop 
+	r> r> swap !
+	xflush
+	;
+
+: xr
+	begin runner again ;
+	
+: initi
+	init-ws
+	yellow
+	buffer-wh
+	line
+	$00FF00 0 led-n!
+	xflush 
+	runner
+;
+
+initi
+
+compiletoram
