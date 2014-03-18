@@ -1,0 +1,70 @@
+bitkanone is intended to control WS2812B Led-Strips, bit features more stuff around mecrisp-Forth for stellaris
+(c)copyright 2013 by Gerald Wodni
+
+
+== Authors ==
+
+mecrisp is a Forth system written by Matthias Koch.
+
+bitkanone itself is written by Gerald Wodni
+
+
+== License ==
+
+This Software is Free Software under the terms of GPLv3,
+
+See mecrisp directories for their respective licenses.
+
+
+== Make & Break ==
+
+Program mecrisp into the msp430 using mspdebug:
+$ mspdebug -rf2500 "prog mecrisp/forth-mecrisp-2553.hex"
+
+Merge all source-code into one file for an easy upload:
+$ ./merge
+
+Start a serial-terminal (picoterm)
+$ mecrisp/terminal
+
+Instruct picoterm to upload the merged file:
+<ctrl-a><ctrl-s>nametag.fs<return>
+
+
+== Words ==
+
+\ - display -
+\ basic
+d-init		( -- )			initialize display and set brightness to 128 (max)
+pwm		( n -- )		dim display [0,128]
+clear		( -- )			clear display
+d( 		( -- ) parse		parse until ) and display (interpretation)
+d"		( -- ) parse		stores string literal (compilation)
+
+\ move
+home		( -- )			goto line 0, column 0
+line		( n -- )		goto line [0,3]
+column		( n -- )		goto column [0,131]
+
+\ format
+tall		( -- )			2 line heigh font
+small		( -- )			1 line heigh font
+regilar		( -- )			1px width
+bold		( -- )			2px width
+wide		( -- )			3px width
+
+\ variables
+font		can be "7px" or "rocket"
+
+
+
+= tl;dr =
+mspdebug -rf2500 "prog mecrisp/forth-mecrisp-2553.hex"
+./merge
+mecrisp/terminal
+<c-a><c-s>nametag.fs<cr>
+
+
+== Run ==
+
+button-demo: red=dim-light yellow=bright blue=dark

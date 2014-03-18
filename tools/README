@@ -1,0 +1,2 @@
+createFont.py converts images into Forth-source,
+which can be process by nametag

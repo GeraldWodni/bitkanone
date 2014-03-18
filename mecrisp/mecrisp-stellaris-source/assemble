@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd kl25z128
+make clean all && ls -l *.bin && md5sum *.bin && cp *.bin ../../kl25z128 && cp *.srec ../../kl25z128
+cd ..
+
+cd lm4f120
+make clean all && ls -l *.bin && md5sum *.bin && cp *.bin ../../lm4f120
+cd ..
+
+cd lm4f232
+make clean all && ls -l *.bin && md5sum *.bin && cp *.bin ../../lm4f232
+cd ..
+
+cd stm32f1
+make clean all && ls -l *.bin && md5sum *.bin && cp *.bin ../../stm32f1
+cd ..
+
+cd stm32f4
+make clean all && ls -l *.bin && md5sum *.bin && cp *.bin ../../stm32f4
+cd ..
+

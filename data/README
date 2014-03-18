@@ -1,0 +1,5 @@
+The fonts- and images-directories hold the source images,
+which are compiled into this diectory using createFont (see tools)
+
+After creating the source, prepend appropriate create to the file
+e.g. "create 7px"

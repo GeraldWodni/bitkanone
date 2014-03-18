@@ -1,0 +1,112 @@
+05.06.2013, Matthias Koch, Mecrisp-Stellaris 0.1 experimental:
+
+  I am very happy to announce Mecrisp-Stellaris !
+  This is the very first beginning, expect monsters inside.
+
+  As this is the younger sister of Mecrisp for MSP430,
+  they share their development history and most design ideas.
+
+
+12.06.2013, Matthias Koch, Mecrisp-Stellaris 0.2 experimental:
+
+  - Unicode support
+  - First interrupt handler for Systick-Timer
+  - Lots of small changes
+  - Ledcomm ported
+
+15.06.2013, Matthias Koch, Mecrisp-Stellaris 0.3 experimental:
+
+  - Recognizes both LF and CR as line ending
+  - Uses hardware FIFO buffer for serial communication
+  - Enables GPIO hardware on startup
+  - Tidied up internal register usage
+  - Faster interrupt entry
+  - Fetch-Modify-Store definitions are now interrupt safe
+  - Mecrisp-Stellaris now generates smaller code
+  - Tidied up debug messages
+  - Lots of small changes
+
+23.06.2013, Matthias Koch, Mecrisp-Stellaris 0.4 experimental:
+
+  - Examples in Forth for Analog, Timer, PWM and Interrupts
+  - Interrupt handling for Ports and Timers included
+  - Tidied up source code
+  - Core needs less RAM
+  - Lots of small changes
+
+01.07.2013, Matthias Koch, Mecrisp-Stellaris 0.5 experimental:
+
+  - Faster comparisons & bit@
+  - Beautiful output for .s in current base
+  - Analog Interrupts for ADC0 included
+  - Examples in Forth for PLL setup and 1 Msps analog sampling
+
+07.07.2013, Matthias Koch, Mecrisp-Stellaris 0.6 experimental:
+
+  - New target: STM32F407 on STM32F4-Discovery board
+  - Removed experimental atomic memory access from core
+  - Rearranged source code and 
+    added English comments to simplify porting
+  - First examples for STM32F4 included
+
+29.07.2013, Matthias Koch, Mecrisp-Stellaris 0.6.1 experimental:
+
+  - Bugfix in min and max
+  - 1 Msps analog sampling example for STM
+
+24.08.2013, Matthias Koch, Mecrisp-Stellaris 0.7 experimental:
+
+  - New target: KL25Z128 on Freescale Freedom FRDM-KL25Z board
+  - Deep changes in core:
+    - New code generator for M0
+    - Improved code generator for M3
+
+10.08.2013, Matthias Koch, Mecrisp-Stellaris 0.7.1 experimental:
+
+  - ADC and DAC examples for KL25Z128
+  - Improved code generation for M0
+
+07.11.2013, Matthias Koch, Mecrisp-Stellaris 0.7.2:
+
+  - A lot of testing later: "experimental" is gone !
+  - Disassembler for M0 included
+  - Two channel 1 Msps sampling example for LM4F120
+  - Contributions:
+      Random number generator for STM32F4 by Sean Stasiak
+      LM4F232H5QC port for Chinese QF-LM4F232 board by 呂明貴 (Albert)
+
+16.11.2013, Matthias Koch, Mecrisp-Stellaris 0.8:
+
+  - Deep changes in core: Opcodings !
+    They generate faster code for all targets.
+
+28.11.2013, Matthias Koch, Mecrisp-Stellaris 0.8.1:
+
+  - New target: STM32F100 on STM VL Discovery board
+
+18.12.2013, Matthias Koch, Mecrisp-Stellaris 0.9:
+
+  - Double numbers and s31.32 fixpoint calculations
+  - Sine/Cosine Cordic algorithm
+  - Two channel 1 Msps oscilloscope for LM4F120
+
+31.12.2013, Matthias Koch, Mecrisp-Stellaris 0.9.1:
+
+  - Partial disassembler for M3/M4 included
+  - Small optimisations in core
+
+13.01.2014, Matthias Koch, Mecrisp-Stellaris 0.9.2:
+
+  - Small optimisations in M3/M4 code generator
+  - Faster interrupt trampolines for M3/M4
+  - Timer interrupts for STM32F407
+  - Added rdrop and 2rdrop
+
+06.02.2014, Matthias Koch, Mecrisp-Stellaris 0.9.3:
+
+  - Added for convenience: d/ mod f.n
+  - Final testing package for upcoming stable 1.0 release
+
+01.03.2014, Matthias Koch, Mecrisp-Stellaris 1.0:
+
+  Finally the first stable release of Mecrisp-Stellaris !

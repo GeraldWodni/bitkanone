@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd kl25z128
+make clean
+cd ..
+
+cd lm4f120
+make clean
+cd ..
+
+cd lm4f232
+make clean
+cd ..
+
+cd stm32f1
+make clean
+cd ..
+
+cd stm32f4
+make clean
+cd ..
+
