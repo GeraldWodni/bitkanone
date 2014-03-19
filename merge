@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# base functions
+echo -e "eraseflash\n\n\n" > bitkanone.fs
+echo -e "compiletoflash\n" >> bitkanone.fs
+cat utils.fs		>> bitkanone.fs
+cat pll.fs		>> bitkanone.fs
+cat spi.fs		>> bitkanone.fs
+cat ws2812.fs		>> bitkanone.fs
+
+## static data (fonts and images)
+#echo -e "compiletoflash\n" >> nametag.fs
+#cat data/7px.fs		>> nametag.fs
+#cat data/rocket.fs	>> nametag.fs
+#cat data/drache.fs	>> nametag.fs
+#
+## application
+#cat text.fs	>> nametag.fs
+#cat buttons.fs	>> nametag.fs
+#
+## echo -e "cornerstone rewind-to-buttons\n" >> nametag.fs
+##cat rocket.fs	>> nametag.fs
+##cat triceps.fs	>> nametag.fs
+##cat backlight.fs	>> nametag.fs
+##
+##cat apper.fs	>> nametag.fs
+
