@@ -13,22 +13,22 @@ bitkanone itself is written by Gerald Wodni
 
 This Software is Free Software under the terms of GPLv3,
 
-See mecrisp directories for their respective licenses.
+See tools/ directories for their respective licenses.
 
 
 == Make & Break ==
 
-Program mecrisp into the msp430 using mspdebug:
-$ mspdebug -rf2500 "prog mecrisp/forth-mecrisp-2553.hex"
+Program mecrisp into the lm4f120 using lm4flash (might require sudo):
+$ tools/lm4flash/lm4flash tools/mecrisp/lm4f120/mecrisp-stellaris-lm4f120.bin
 
 Merge all source-code into one file for an easy upload:
 $ ./merge
 
 Start a serial-terminal (picoterm)
-$ mecrisp/terminal
+$ ./terminal
 
 Instruct picoterm to upload the merged file:
-<ctrl-a><ctrl-s>nametag.fs<return>
+<ctrl-a><ctrl-s>bitkanone.fs<return>
 
 
 == Words ==
@@ -59,10 +59,10 @@ font		can be "7px" or "rocket"
 
 
 = tl;dr =
-mspdebug -rf2500 "prog mecrisp/forth-mecrisp-2553.hex"
+(sudo) tools/lm4flash/lm4flash tools/mecrisp/lm4f120/mecrisp-stellaris-lm4f120.bin
 ./merge
-mecrisp/terminal
-<c-a><c-s>nametag.fs<cr>
+./terminal
+<c-a><c-s>bitkanone.fs<cr>
 
 
 == Run ==

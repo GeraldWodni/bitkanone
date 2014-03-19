@@ -1,2 +1,6 @@
 createFont.py converts images into Forth-source,
-which can be process by nametag
+which can be process by bitkanone
+
+mecrisp is a Forth system which is needed for bitkanone to run
+
+lm4flash is a tool to flash bitkanone onto a launchpad
