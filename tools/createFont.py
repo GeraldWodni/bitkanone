@@ -75,7 +75,15 @@ class FontTransformer( Transformer ):
 			print ">>>>>>>>>>>>>>>>>>>>===", chr(a), "==="
 			
 			self.processLetterLine( y, a )
-			y += 8
+
+			# advance to next line
+			while True:
+				color = self.pixels[0, y]
+				if color == ( 0, 255, 0 ):
+					break
+				y += 1
+			y += 1
+
 			a += 16
 
 	def processLetterLine( self, y, a ):

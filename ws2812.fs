@@ -1,7 +1,7 @@
 \ WS2812 Driver for lm4f120-MECRISP
 \ (c)copyright 2014 by Gerald Wodni <gerald.wodni@gmail.com>
 
-: init-ws
+: init-ws-spi
     SSI_CR0_SPO SSI_CR0_SPH or
     4 2 init-ssi                ( Initialize SSI2 with 8 data bits as master )
     2 2 2 ssi-speed             ( Slow Speed, 16MHz )
@@ -143,14 +143,12 @@ constant led-buffer
 	-1 +loop
 	;
 
-: init
-	init-ws
+: init-ws
+	init-ws-spi
 	off
 	buffer-wave 		\ draw wave background
 	line 			\ draw red diagonal line
 	$000F00 0 led-n! 	\ make first pixel green
 	z-flush ;
 
-\ extend from here on
-cornerstone cold
-init
+init-ws
