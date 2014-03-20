@@ -78,6 +78,11 @@ constant led-buffer
 		$000001 i !
 	4 +loop ;
 
+: buffer! ( x-color -- )
+	led-buffer led-buffer-size bounds do
+		dup i !
+	4 +loop drop ;
+
 : buffer-off
 	led-buffer led-buffer-size bounds do
 		$0 i !

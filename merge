@@ -5,6 +5,7 @@ echo -e "eraseflash\n\n\n" > bitkanone.fs
 echo -e "compiletoflash\n" >> bitkanone.fs
 cat utils.fs		>> bitkanone.fs
 cat pll.fs		>> bitkanone.fs
+cat delay.fs		>> bitkanone.fs
 cat spi.fs		>> bitkanone.fs
 cat ws2812.fs		>> bitkanone.fs
 
