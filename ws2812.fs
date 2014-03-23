@@ -34,6 +34,7 @@
 
 240 constant leds
 
+: on      $FFFFFF leds n-leds ;
 : off     $000000 leds n-leds ;
 : red	  $010000 leds n-leds ;
 : yellow  $010100 leds n-leds ;
@@ -42,6 +43,9 @@
 : blue	  $000001 leds n-leds ;
 : magenta $010001 leds n-leds ;
 : white	  $010101 leds n-leds ;
+
+: latch 50 us ;
+: flash on latch off ;
 
 : bill leds 0 do
 		$FF0000 >rgb
@@ -155,5 +159,7 @@ constant led-buffer
 	line 			\ draw red diagonal line
 	$000F00 0 led-n! 	\ make first pixel green
 	z-flush ;
+
+: init init init-delay init-ws ;
 
 init-ws

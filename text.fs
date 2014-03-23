@@ -6,9 +6,9 @@ cold \ clear all until ws2812
 
 compiletoflash
 
-$000F00 variable text-color
+$003F00 variable text-color
 \ TODO: cvariable would be sufficient
-132 variable max-column 	\ stop printing at this column
+cols variable max-column 	\ stop printing at this column
   0 variable cur-column 		\ current column
   0 variable col-offset 		\ column offset
   1 variable boldness 		\ times to repeat pattern
@@ -101,7 +101,7 @@ $000F00 variable text-color
 	0 cur-column !
 	;
 
-: test 
+: bussi 
 	init-ws
 	clear
 	buffer-wave
@@ -120,5 +120,11 @@ $000F00 variable text-color
 	[char] ) d-emit
 	z-flush
 	;
+
+: test
+	clear
+	d" gery YOxx"
+	z-flush ;
+
 
 test
