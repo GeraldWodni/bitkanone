@@ -149,6 +149,28 @@ $000002 constant gol-dead
 	14 4 g!
 	z-flush ;
 
+: quadpole ( -- )
+	buffer-off
+
+	11 0 g! 12 0 g!
+	11 1 g!         13 1 g!
+	
+	                13 3 g!         15 3 g!
+			
+	                                15 5 g!         17 5 g!
+	                                        16 6 g! 17 6 g!
+	z-flush ;
+
+: schick ( -- )
+	buffer-off
+
+	        15 3 g! 16 3 g!
+	14 4 g! 15 4 g! 16 4 g!
+	        15 5 g! 16 5 g!
+
+	z-flush ;
+	
+
 : init-gol
 	init-delay
 	init-ws
