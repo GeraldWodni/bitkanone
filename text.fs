@@ -6,13 +6,18 @@ cold \ clear all until ws2812
 
 compiletoflash
 
-$003F00 variable text-color
+: allocate ( n -- c-addr )
+	compiletoram here swap allot compiletoflash ;
+
+$000400 variable text-color
 \ TODO: cvariable would be sufficient
 cols variable max-column 	\ stop printing at this column
   0 variable cur-column 		\ current column
   0 variable col-offset 		\ column offset
   1 variable boldness 		\ times to repeat pattern
-8px variable font
+8px-cond variable font
+
+0 variable cur-text
 
 \ font-sizes, usage: "regular wide
 : wide 3 boldness ! ;
@@ -29,7 +34,6 @@ cols variable max-column 	\ stop printing at this column
 	dup d-column cur-column ! col-offset ! ;
 : column ( n-column -- )
 	0 swap offset-column ;
-
 
 \ expand lower nibble across byte
 : stretch ( x -- x )
@@ -91,6 +95,16 @@ cols variable max-column 	\ stop printing at this column
 : d-type ( c-addr u -- )
 	str-bounds ?do i c@ d-emit loop ;
 
+: d-length ( c-addr -- n-len )
+	0 swap str-bounds
+	?do
+		i c@ c-pos c@ +
+		1+
+	loop
+	dup 0 > if
+		1-
+	then boldness @ * ;
+
 : d( [char] ) parse d-type z-flush immediate ;
 
 : d" postpone s" postpone d-type immediate ;
@@ -105,26 +119,36 @@ cols variable max-column 	\ stop printing at this column
 	init-ws
 	clear
 	buffer-wave
-	$3F0000 text-color !
-	d" B"
-	$3F3F00 text-color !
-	d" u"
-	$003F00 text-color !
-	d" s"
-	$003F3F text-color !
-	d" s"
-	$00004F text-color !
-	d" i"
-	$3F3F3F text-color !
-	d" ;"
-	[char] ) d-emit
+	$3F0000 text-color !  d" B"
+	$3F3F00 text-color !  d" u"
+	$003F00 text-color !  d" s"
+	$003F3F text-color !  d" s"
+	$00004F text-color !  d" i"
+	$3F3F3F text-color !  d" ;" [char] ) d-emit
 	z-flush
 	;
 
-: test
-	clear
-	d" gery YOxx"
-	z-flush ;
+: >scroll ( c-addr -- )
+	dup d-length 1+ 0 do
+		i 0 offset-column
+		clear
+		dup d-type z-flush
+		100 ms
+	loop drop ;
 
+: scroll( [char] ) parse >scroll immediate ;
+
+: test
+	\ clear
+	s"    Hallo liebe Forther, kann das jeder lesen?" >scroll
+	\ s" Hallo" d-length .
+	\ s" I" d-length .
+	\ s" II" d-length .
+	\ dup cur-text !
+	\ z-flush
+	;
+
+
+cornerstone text
 
 test
