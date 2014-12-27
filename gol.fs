@@ -8,8 +8,8 @@ cold
 compiletoflash
 
 \ colors
-$0F0F00 constant gol-alive
-$000002 constant gol-dead
+$3F0000 constant gol-alive
+$00007F constant gol-dead
 
 \ fast modulo which assumes nominator is in [-denominator denominator*2)
 : wrap ( n-nominator n-denominator -- n-remainder )
@@ -38,9 +38,12 @@ $000002 constant gol-dead
 : xy! ( x-xolor n-x n-y -- )
 	xy led-n! ;
 
+: alive? ( color -- f )
+	$FFFF00 and ;
+
 \ currently alive
 : alive@ ( n-x n-y -- f )
-	xy@ $FFFFFF and gol-alive = ;
+	xy@ alive? ;
 
 \ count living neighbors
 0 variable cur-neighbors
@@ -81,10 +84,34 @@ $000002 constant gol-dead
 	\ paint next iteration
 	rows 0 do
 		cols 0 do
-			i j xy@ $80000000 and if
-				gol-alive
+			\ now on
+			i j xy@ dup $80000000 and if
+				\ previously off
+				dup $FF and if
+					drop gol-alive
+				else
+					$FFFF00 and		\ ensure only yellow
+					dup $FF00 and $AF00 < if
+						$0F0000 -
+						$000F00 +	\ dimm
+					else
+								\ minimum value
+					then
+				then
+			\ now off
 			else
-				gol-dead
+				\ previously on, make full blue
+				dup alive? if
+					drop gol-dead
+				\ previously off
+				else
+					$FF and		\ ensure only blue
+					dup $F > if
+						$F -	\ dimm
+					else
+						drop $F	\ minimum value
+					then
+				then
 			then
 			i j xy!
 		loop
@@ -178,5 +205,7 @@ $000002 constant gol-dead
 	20 gol-steps
 	;
 
-init-gol
+cornerstone gol
 
+
+init-gol

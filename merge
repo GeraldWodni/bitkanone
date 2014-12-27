@@ -7,9 +7,11 @@ cat utils.fs		>> bitkanone.fs
 cat pll.fs		>> bitkanone.fs
 cat delay.fs		>> bitkanone.fs
 cat spi.fs		>> bitkanone.fs
+
+echo -e "\ncornerstone spibare\n" >> bitkanone.fs
 cat ws2812.fs		>> bitkanone.fs
 
-## static data (fonts and images)
+# static data (fonts and images)
 echo -e "\ncreate 8px\n" >> bitkanone.fs
 cat data/8px.fs		>> bitkanone.fs
 echo -e "\ncreate 8px-cond\n" >> bitkanone.fs

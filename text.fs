@@ -4,6 +4,7 @@
 cold \ clear all until ws2812
 
 
+
 compiletoflash
 
 : allocate ( n -- c-addr )
@@ -92,11 +93,15 @@ cols variable max-column 	\ stop printing at this column
 	;
 
 
+\ : d-emit dup ." EMIT:  " emit cr d-emit ;
+
 : d-type ( c-addr u -- )
-	str-bounds ?do i c@ d-emit loop ;
+	\ str-bounds ?do i c@ d-emit loop ;
+	bounds ?do i c@ d-emit loop ;
 
 : d-length ( c-addr -- n-len )
-	0 swap str-bounds
+	\ 0 swap str-bounds
+	0 -rot bounds
 	?do
 		i c@ c-pos c@ +
 		1+
@@ -119,22 +124,22 @@ cols variable max-column 	\ stop printing at this column
 	init-ws
 	clear
 	buffer-wave
-	$3F0000 text-color !  d" B"
-	$3F3F00 text-color !  d" u"
-	$003F00 text-color !  d" s"
-	$003F3F text-color !  d" s"
-	$00004F text-color !  d" i"
-	$3F3F3F text-color !  d" ;" [char] ) d-emit
+	$3F0000 text-color !  [char] B d-emit
+	$3F3F00 text-color !  [char] u d-emit
+	$003F00 text-color !  [char] s d-emit
+	$003F3F text-color !  [char] s d-emit
+	$00004F text-color !  [char] i d-emit
+	$3F3F3F text-color !  d" ;)"
 	z-flush
 	;
 
 : >scroll ( c-addr -- )
-	dup d-length 1+ 0 do
+	2dup d-length 1+ 0 do
 		i 0 offset-column
 		clear
-		dup d-type z-flush
+		2dup d-type z-flush
 		100 ms
-	loop drop ;
+	loop 2drop ;
 
 : scroll( [char] ) parse >scroll immediate ;
 
@@ -147,8 +152,12 @@ cols variable max-column 	\ stop printing at this column
 	\ dup cur-text !
 	\ z-flush
 	;
+	
+: x s" hallo"  ;
+
+\ str-bounds use counted strings, but s" gives counted strings, recheck that behaviour
 
 
 cornerstone text
 
-test
+\ test

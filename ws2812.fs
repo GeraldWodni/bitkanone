@@ -1,6 +1,13 @@
 \ WS2812 Driver for lm4f120-MECRISP
 \ (c)copyright 2014 by Gerald Wodni <gerald.wodni@gmail.com>
 
+
+spibare \ clear until ws2812
+
+
+compiletoflash
+
+
 : init-ws-spi
     SSI_CR0_SPO SSI_CR0_SPH or
     4 2 init-ssi                ( Initialize SSI2 with 8 data bits as master )
@@ -60,6 +67,7 @@
 cols rows * constant leds
 leds 4 * constant led-buffer-size
 cols 4 * constant row-size
+row-size 2/ constant row-size/2
 led-buffer-size 
 compiletoram
 here swap allot
@@ -140,14 +148,45 @@ constant led-buffer
 		i @ >rgb
 	-4 +loop ;
 
-\ flush in one zig-zag-sequence, takes about 10ms
-: z-flush ( -- )
+\ flush in one long zig-zag-sequence, takes about 10ms
+: lz-flush ( -- )
 	0 7 do
 		i row-bounds
 		i 1 and if
 			-row>rgb
 		else
 			row>rgb
+		then
+	-1 +loop
+	;
+
+: r-row-bounds ( n -- )
+	row-size *      \ row offset
+	led-buffer +    \ total offset
+	row-size/2 bounds ;
+
+: l-row-bounds ( n -- )
+	row-size *      \ row offset
+	led-buffer +    \ total offset
+	row-size/2 +	\ add half row 
+	row-size/2 bounds ;
+
+\ flush 2 zig-zags
+: z-flush ( -- )
+	0 7 do
+		i r-row-bounds
+		i 1 and if
+			row>rgb
+		else
+			-row>rgb
+		then
+	-1 +loop
+	0 7 do
+		i l-row-bounds
+		i 1 and if
+			row>rgb
+		else
+			-row>rgb
 		then
 	-1 +loop
 	;
