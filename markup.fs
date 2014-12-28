@@ -28,15 +28,15 @@ compiletoflash
 	endcase
 	;
 
-: m-length ( c-addr -- )
-	0 swap
-	str-bounds ?do
+: m-length ( c-addr n -- )
+	0 -rot
+	bounds ?do
 		i c@ c-pos c@ 1+ ." L:" . cr
 	loop ;
 
-: m-length ( c-addr -- )
-	0 swap
-	str-bounds ?do
+: m-length ( c-addr n -- )
+	0 -rot
+	bounds ?do
 		\ control sequence
 		i c@ dup [char] \ = if
 			drop \ drop backspace
@@ -54,9 +54,8 @@ compiletoflash
 		then
 	+loop ;
 
-: markup ( c-addr -- )
-	\ dup m-length .
-	str-bounds ?do
+: markup ( c-addr n -- )
+	bounds ?do
 		\ control sequence
 		i c@ dup [char] \ = if
 			drop \ drop backspace
@@ -69,26 +68,26 @@ compiletoflash
 		then
 	+loop ;
 
-: m( [char] ) parse markup z-flush immediate ;
+: m( [char] ) parse markup flush immediate ;
 
-: m" postpone s" postpone markup z-flush immediate ;
+: m" postpone s" postpone markup flush immediate ;
 
-: >m-scroll ( c-addr -- )
-	dup m-length 1+ 0 do
+: >m-scroll ( c-addr n -- )
+	2dup m-length 1+ 0 do
 		i 0 offset-column
 		clear
-		dup markup z-flush
+		2dup markup flush
 		100 ms
-	loop drop ;
+	loop 2drop ;
 
 : ms( [char] ) parse >m-scroll immediate ;
 
 : x s" \w\2h\ra\b\1al\:l\.\co" ;
 
-: mcr ( c-addr -- )
-	dup type cr m-length cr . cr ;
+: mcr ( c-addr n -- )
+	2dup type cr m-length cr . cr ;
 
-: b $FFFFFF buffer! z-flush 10 ms off ;
+: b $FFFFFF buffer! flush 10 ms off ;
 
 : bb 0 do b 100 ms loop ;
 
@@ -105,7 +104,7 @@ compiletoflash
 
 : test
 	clear
-	x markup z-flush
+	x markup flush
 	s" h" mcr
 	s" \w\2h" mcr
 	s" \w\2\rh" mcr
@@ -115,7 +114,5 @@ compiletoflash
 	x >m-scroll
 	;
 
-\ m( ll)
-\ m( \w\2h\ra\b\1al\:l\.\co)
-\ x m-length .
-\ test
+
+cornerstone rewind-markup

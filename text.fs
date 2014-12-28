@@ -110,7 +110,7 @@ cols variable max-column 	\ stop printing at this column
 		1-
 	then boldness @ * ;
 
-: d( [char] ) parse d-type z-flush immediate ;
+: d( [char] ) parse d-type flush immediate ;
 
 : d" postpone s" postpone d-type immediate ;
 
@@ -130,14 +130,14 @@ cols variable max-column 	\ stop printing at this column
 	$003F3F text-color !  [char] s d-emit
 	$00004F text-color !  [char] i d-emit
 	$3F3F3F text-color !  d" ;)"
-	z-flush
+	flush
 	;
 
 : >scroll ( c-addr -- )
 	2dup d-length 1+ 0 do
 		i 0 offset-column
 		clear
-		2dup d-type z-flush
+		2dup d-type flush
 		100 ms
 	loop 2drop ;
 
@@ -145,7 +145,7 @@ cols variable max-column 	\ stop printing at this column
 
 : test
 	\ clear
-	s"    Hallo liebe Forther, kann das jeder lesen?" >scroll
+	s"    Hi there can anybody read this?" >scroll
 	\ s" Hallo" d-length .
 	\ s" I" d-length .
 	\ s" II" d-length .

@@ -2,7 +2,7 @@
 \ (c)copyright 2014 by Gerald Wodni <gerald.wodni@gmail.com>
 
 
-spibare \ clear until ws2812
+rewind-ssi \ clear until ws2812
 
 
 compiletoflash
@@ -120,11 +120,11 @@ constant led-buffer
 		i !
 	4 +loop 
 	r> r> swap !
-	xflush
 	;
 
-\ flush in one sequence
-: flush cr
+
+\ linear flush in one sequence
+: l-flush cr
 	led-buffer led-buffer-size bounds do
 		i @ >rgb
 	4 +loop ; 
@@ -190,6 +190,30 @@ constant led-buffer
 		then
 	-1 +loop
 	;
+
+\ mirror-flush 2 zig-zags
+: mz-flush ( -- )
+	0 7 do
+		i l-row-bounds
+		i 1 and if
+			-row>rgb
+		else
+			row>rgb
+		then
+	-1 +loop
+	0 7 do
+		i r-row-bounds
+		i 1 and if
+			-row>rgb
+		else
+			row>rgb
+		then
+	-1 +loop
+	;
+
+' z-flush variable flush-target
+
+: flush flush-target @ execute ;
 
 : init-ws
 	init-ws-spi

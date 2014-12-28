@@ -116,14 +116,14 @@ $00007F constant gol-dead
 			i j xy!
 		loop
 	loop
-	z-flush ;
+	flush ;
 
 : gol-steps ( n -- )
 	0 do gol-step 300 ms loop ;
 
 \ kill all cells
 : gol-off 
-	buffer-off z-flush ;
+	buffer-off flush ;
 
 \ set gol-cell
 : g! ( n-x n-y -- )
@@ -134,7 +134,7 @@ $00007F constant gol-dead
 	         15 2 g!
 	                  16 3 g!
 	14 4 g!  15 4 g!  16 4 g!
-	z-flush ;
+	flush ;
 
 : lwss ( -- )
 	buffer-off
@@ -142,7 +142,7 @@ $00007F constant gol-dead
 	                                    17 3 g!
 	13 4 g!                             17 4 g!
 	         14 5 g!  15 5 g!  16 5 g!  17 5 g!
-	z-flush ;
+	flush ;
 
 : gol-line ( n -- )
 	buffer-off
@@ -150,7 +150,7 @@ $00007F constant gol-dead
 	bounds do
 		i 3 g!
 	loop 
-	z-flush ;
+	flush ;
 
 : die-hard ( -- )
 	buffer-off
@@ -162,7 +162,7 @@ $00007F constant gol-dead
 	12 3 g!
 	13 3 g!
 	13 4 g!
-	z-flush ;
+	flush ;
 
 : acorn ( -- )
 	buffer-off
@@ -174,7 +174,7 @@ $00007F constant gol-dead
 	15 2 g!
 	15 4 g!
 	14 4 g!
-	z-flush ;
+	flush ;
 
 : quadpole ( -- )
 	buffer-off
@@ -186,7 +186,7 @@ $00007F constant gol-dead
 			
 	                                15 5 g!         17 5 g!
 	                                        16 6 g! 17 6 g!
-	z-flush ;
+	flush ;
 
 : schick ( -- )
 	buffer-off
@@ -195,7 +195,7 @@ $00007F constant gol-dead
 	14 4 g! 15 4 g! 16 4 g!
 	        15 5 g! 16 5 g!
 
-	z-flush ;
+	flush ;
 	
 
 : init-gol

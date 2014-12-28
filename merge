@@ -8,7 +8,6 @@ cat pll.fs		>> bitkanone.fs
 cat delay.fs		>> bitkanone.fs
 cat spi.fs		>> bitkanone.fs
 
-echo -e "\ncornerstone spibare\n" >> bitkanone.fs
 cat ws2812.fs		>> bitkanone.fs
 
 # static data (fonts and images)

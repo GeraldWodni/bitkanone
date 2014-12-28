@@ -27,3 +27,11 @@ compiletoflash
 		gol-standalone
 	key? until ;
 
+: init init 
+	1000 ms
+	off $00FF00 >rgb 
+	5000 ms
+	key? invert if
+		gol-endless
+	then ;
+
