@@ -8,7 +8,7 @@ cold
 compiletoflash
 
 \ colors
-$3F0000 constant gol-alive
+$5F0000 constant gol-alive
 $00007F constant gol-dead
 
 \ fast modulo which assumes nominator is in [-denominator denominator*2)
@@ -87,15 +87,14 @@ $00007F constant gol-dead
 			\ now on
 			i j xy@ dup $80000000 and if
 				\ previously off
-				dup $FF and if
+				dup $FFFF00 and 0= if
 					drop gol-alive
 				else
 					$FFFF00 and		\ ensure only yellow
-					dup $FF00 and $AF00 < if
-						$0F0000 -
-						$000F00 +	\ dimm
+					dup $FF00 and $E000 < if
+						$001000 +	\ dimm
 					else
-								\ minimum value
+						drop $5FF000	\ maximum value
 					then
 				then
 			\ now off
@@ -204,6 +203,8 @@ $00007F constant gol-dead
 	10 gol-line
 	20 gol-steps
 	;
+
+: g gol-step ;
 
 cornerstone gol
 

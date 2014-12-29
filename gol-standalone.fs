@@ -6,7 +6,8 @@ gol
 compiletoflash
 
 : off-break ( -- )
-	gol-off
+	buffer-off
+	$000007 leds n-leds
 	1000 ms ;
 
 : step-break ( n-steps -- )
