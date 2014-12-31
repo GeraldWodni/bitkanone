@@ -75,7 +75,7 @@ compiletoflash
 : >m-scroll ( c-addr n -- )
 	2dup m-length 1+ 0 do
 		i 0 offset-column
-		clear
+		buffer-off
 		2dup markup flush
 		100 ms
 	loop 2drop ;

@@ -77,7 +77,7 @@ s"      We will create a civilization of the Mind in Cyberspace. May it be more 
 : init
 	init
 	1000 ms
-	['] mz-flush flush-target !
+	\ ['] mz-flush flush-target !
 	off $00FF00 >rgb 
 	5000 ms
 	key? invert if
