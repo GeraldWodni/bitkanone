@@ -106,6 +106,15 @@ constant led-buffer
 : led-n! ( x-color n-index -- ) inline
 	led-n ! ;
 
+: led-xy ( n-x n-y -- index ) inline
+	cols * + ;
+
+: xy! ( x-color n-x n-y -- )
+	led-xy led-n! ;
+
+: xy@ ( n-x n-y -- x-color )
+	led-xy led-n @ ;
+
 : line 
 	8 0 do
 		$0F0000 i 30 * i + led-n!
