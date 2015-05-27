@@ -23,6 +23,10 @@ compiletoflash
 	die-hard	50 step-break
 	10 gol-line	50 step-break
 	;
+
+: key-flush ( -- )
+	begin key? while key drop repeat ;
+
 : gol-endless
 	begin
 		gol-standalone
@@ -30,9 +34,14 @@ compiletoflash
 
 : init init 
 	1000 ms
-	off $00FF00 >rgb 
+	key-flush
+	off 100 ms $003F00 >rgb 
 	5000 ms
 	key? invert if
 		gol-endless
+	else
+		key-flush
+		$3F0000 >rgb
+		." Human presence detected" cr
 	then ;
 
