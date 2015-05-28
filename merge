@@ -9,11 +9,24 @@ cat delay.fs		>> bitkanone.fs
 cat spi.fs		>> bitkanone.fs
 
 cat ws2812.fs		>> bitkanone.fs
+cat random.fs           >> bitkanone.fs
 
 # static data (fonts and images)
 echo -e "\ncreate 8px\n" >> bitkanone.fs
 cat data/8px.fs		>> bitkanone.fs
 echo -e "\ncreate 8px-cond\n" >> bitkanone.fs
 cat data/8px-cond.fs	>> bitkanone.fs
-echo -e "\ncornerstone cold\n" >> bitkanone.fs
+echo -e "\ncornerstone raw\n" >> bitkanone.fs
 
+# additional functionality for easy demoing, with extended cold
+cat text.fs	>> bitkanone.fs
+cat markup.fs	>> bitkanone.fs
+cat gol.fs	>> bitkanone.fs
+cat glitter.fs	>> bitkanone.fs
+cat pnm.fs	>> bitkanone.fs
+
+echo -e "\ncornerstone very-cold\n" >> bitkanone.fs
+
+cat ev.fs       >> bitkanone.fs
+
+echo -e "\ncornerstone cold\n" >> bitkanone.fs

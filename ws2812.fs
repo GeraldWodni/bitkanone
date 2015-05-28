@@ -43,13 +43,13 @@ compiletoflash
 
 : on      $FFFFFF leds n-leds ;
 : off     $000000 leds n-leds ;
-: red	  $010000 leds n-leds ;
-: yellow  $010100 leds n-leds ;
-: green   $000100 leds n-leds ;
-: cyan	  $000101 leds n-leds ;
-: blue	  $000001 leds n-leds ;
-: magenta $010001 leds n-leds ;
-: white	  $010101 leds n-leds ;
+: red	  $1F0000 leds n-leds ;
+: yellow  $1F1F00 leds n-leds ;
+: green   $001F00 leds n-leds ;
+: cyan	  $001F1F leds n-leds ;
+: blue	  $00001F leds n-leds ;
+: magenta $1F001F leds n-leds ;
+: white	  $1F1F1F leds n-leds ;
 
 : latch 50 us ;
 : flash on latch off ;
@@ -74,21 +74,11 @@ here swap allot
 compiletoflash
 constant led-buffer
 
-: buffer-white
-        led-buffer led-buffer-size bounds do
-                $010101 i !
-        4 +loop ;
-
 \ wave-like pattern
 : buffer-wave
         led-buffer led-buffer-size bounds do
                 i 2 rshift $F and i !
         4 +loop ;
-
-: buffer-blue
-	led-buffer led-buffer-size bounds do
-		$000001 i !
-	4 +loop ;
 
 : buffer! ( x-color -- )
 	led-buffer led-buffer-size bounds do
@@ -115,7 +105,7 @@ constant led-buffer
 : xy@ ( n-x n-y -- x-color )
 	led-xy led-n @ ;
 
-: line 
+: init-line 
 	8 0 do
 		$0F0000 i 30 * i + led-n!
 	loop ;
@@ -228,9 +218,9 @@ constant led-buffer
 	init-ws-spi
 	off
 	buffer-wave 		\ draw wave background
-	line 			\ draw red diagonal line
+	init-line 	        \ draw red diagonal line
 	$000F00 0 led-n! 	\ make first pixel green
-	z-flush ;
+	flush ;
 
 : init init init-delay init-ws ;
 

@@ -1,5 +1,5 @@
 bitkanone is intended to control WS2812B Led-Strips, bit features more stuff around mecrisp-Forth for stellaris
-(c)copyright 2013 by Gerald Wodni
+(c)copyright 2013-2015 by Gerald Wodni
 
 
 == Authors ==
@@ -30,32 +30,47 @@ $ ./terminal
 Instruct picoterm to upload the merged file:
 <ctrl-a><ctrl-s>bitkanone.fs<return>
 
-
 == Words ==
 
-\ - display -
-\ basic
-d-init		( -- )			initialize display and set brightness to 128 (max)
-pwm		( n -- )		dim display [0,128]
-clear		( -- )			clear display
-d( 		( -- ) parse		parse until ) and display (interpretation)
-d"		( -- ) parse		stores string literal (compilation)
+\ direct leds
+on		( -- )			set all leds to full white
+off		( -- )			disable all leds
+red		( -- )			set leds to soft color ($1F instead of $FF)
+yellow		--//--
+green		--//--
+cyan		--//--
+blue		--//--
+magenta		--//--
+white		--//--
 
-\ move
-home		( -- )			goto line 0, column 0
-line		( n -- )		goto line [0,3]
-column		( n -- )		goto column [0,131]
+\ buffer
+flush		( -- )			write buffer using the current flush-target (most likely z-flush)
+buffer-off	( -- )			clear buffer
+buffer!		( u -- )		set all pixels to u
 
-\ format
-tall		( -- )			2 line heigh font
-small		( -- )			1 line heigh font
-regilar		( -- )			1px width
-bold		( -- )			2px width
-wide		( -- )			3px width
+\ game of life (gol)
+game-line	( n -- )
+gol-step	( -- )			compute single gol-step
+g		( -- )			alias for gol-step ( for easy demonstrion )
+game-steps	( n -- )		compute n gol-steps
+gol-off		( -- )			clear all life
+g!		( n-x n-y -- )		spawn live in cell x y
 
-\ variables
-font		can be "7px" or "rocket"
+\ gol-patterns
+glider		( -- )			smallest moving object / hacker-symbol 
+lwss		( -- )			light-weight-space-ship
+gol-line	( n -- )		line with n elements
+die-hard	( -- )			small startup colony
+acorn 		( -- )			lives forever on infinite grid, not here :/
+quadpole	( -- )			static
+schick		( -- )
 
+\ glitter
+glitter		( -- )			displays a nice glitter-fire-like effect until a key is pressed
+glitter-color	( -- a )		color variable, standard value: $FFAF3F
+
+\ pnm - display images
+pnm-here        ( -- )                  parses an image in pnm-ascci format, some images can be found in /data/images. Just send them with <ctrl-a><ctrl-s>data/images/1701.ppm<return>
 
 
 = tl;dr =
@@ -66,5 +81,9 @@ font		can be "7px" or "rocket"
 
 
 == Run ==
+On power on the the test pattern will be displayed for one second ( blue-waves with a red dialogal line originating from the top left.
+After that the bottom left (1st) Led will turn green. If you press any key from now on within 5 seconds,
+it will turn red and you will be greeted by "Human presence deteced".
+If no key is received, the ev-demo program is launced and will loop until any key or reset is pressed.
 
-button-demo: red=dim-light yellow=bright blue=dark
+Have fun! ;)

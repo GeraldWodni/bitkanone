@@ -2,11 +2,6 @@
 \ Implementation of Conways game of live
 \ uses the highest byte of the color-buffer (during computation)
 
-cold
-
-
-compiletoflash
-
 \ colors
 $5F0000 constant gol-alive
 $00007F constant gol-dead
@@ -205,8 +200,3 @@ $00007F constant gol-dead
 	;
 
 : g gol-step ;
-
-cornerstone gol
-
-
-init-gol

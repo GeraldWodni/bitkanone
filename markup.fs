@@ -1,15 +1,6 @@
 \ Markup language for text
 \ (c)copyright 2014 by Gerald Wodni
 
-text
-
-
-
-compiletoflash
-
-\ create colors
-\ char g c, $000000 ,
-
 : markup-char ( x -- )
 	case
 		[char] r of $2F0000 text-color ! endof
@@ -82,37 +73,19 @@ compiletoflash
 
 : ms( [char] ) parse >m-scroll immediate ;
 
-: x s" \w\2h\ra\b\1al\:l\.\co" ;
+: hallo s" \w\2h\ra\b\1al\:l\.\co" ;
 
 : mcr ( c-addr n -- )
 	2dup type cr m-length cr . cr ;
 
-: b $FFFFFF buffer! flush 10 ms off ;
-
-: bb 0 do b 100 ms loop ;
-
-: pause begin
-	\ s"            \1\rProgramm: \w14:30 \yWanderung nach zum Heurigen nach Soosz, \w18:00 \yAbendessen im Heurigen \cKrenn \gHauptstraße 76 \m2504 Soosz"
-	s" \.           \yBaK\wi\yp\w\:8\. \rpresents \mMUSIC \cOF \mTHE \cNIGHT \rpowered by \wdas-Salzamt.at \rhave \m\:F\yU\cN\w!"
-	>m-scroll
-	." Press any key
-	?key if
-		key [char] p =
-	else
-		false
-	then until ;
-
 : test
 	clear
-	x markup flush
+	hallo markup flush
 	s" h" mcr
 	s" \w\2h" mcr
 	s" \w\2\rh" mcr
 	s" \w\2\rh\ra" mcr
 	s" \w\2\rh\ra\b\1a" mcr
 	s" \w\2\rh\ra\b\1al" mcr
-	x >m-scroll
+	hallo >m-scroll
 	;
-
-
-cornerstone rewind-markup

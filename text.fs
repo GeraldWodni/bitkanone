@@ -1,14 +1,11 @@
 \ High-Level Display interface: Fonts & Images
 \ (c)copyright 2014 by Gerald Wodni
 
-cold \ clear all until ws2812
+raw \ clear all until ws2812
 
 
 
 compiletoflash
-
-: allocate ( n -- c-addr )
-	compiletoram here swap allot compiletoflash ;
 
 $000400 variable text-color
 \ TODO: cvariable would be sufficient
@@ -143,21 +140,6 @@ cols variable max-column 	\ stop printing at this column
 
 : scroll( [char] ) parse >scroll immediate ;
 
-: test
-	\ clear
+: test-text
 	s"    Hi there can anybody read this?" >scroll
-	\ s" Hallo" d-length .
-	\ s" I" d-length .
-	\ s" II" d-length .
-	\ dup cur-text !
-	\ z-flush
 	;
-	
-: x s" hallo"  ;
-
-\ str-bounds use counted strings, but s" gives counted strings, recheck that behaviour
-
-
-cornerstone text
-
-\ test

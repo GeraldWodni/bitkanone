@@ -2,11 +2,6 @@
 \ Supported Variants: P3 with 24bit colors is supported ( gimp used )
 \ (c) copyright 2015 by Gerald Wodni <gerald.wodni@gmail.com>
 
-gol
-
-
-compiletoflash
-
 : not-supported ( -- )
     ." Format not supported" ;
 

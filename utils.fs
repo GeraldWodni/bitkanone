@@ -35,18 +35,13 @@
           eraseflashfrom
 ;
 
-\ : compiletoram> compiletoram?
-\   compiletoram ;
-\ 
-\ : >compiletoram invert if compiletoflash ;
-\ 
-\ : free-ram
-\ 	compiletoram>
-\ 	flashvar-here here - u.
-\ 	>compiletoram
-\ 	;
-\ 
-\ : free-flash
-\ 	compiletoflash
-\ 	$40000 here - u. ;
+: key-flush ( -- )
+	begin key? while key drop repeat ;
 
+: free-ram
+	compiletoram
+	flashvar-here here - u. ;
+
+: free-flash
+	compiletoflash
+	$40000 here - u. ;
