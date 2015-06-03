@@ -1,4 +1,4 @@
-cold
+\ cold
 
 
 compiletoflash
@@ -119,4 +119,4 @@ cols buffer: drops
 	rain
 	;
 
-init-rain
+: init init init-rain ;

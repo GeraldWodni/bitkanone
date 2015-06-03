@@ -36,12 +36,12 @@ separator
 s" \1      \.\w\2Ich wurde in \rForth\w programmiert, das ist \cProgrammiersprache \wund \yBetriebssystem\w zugleich" >m-scroll
 s" \1      \.\r\2Forth \wgibt es schon voll lang, seit ca \g1970 " >m-scroll
 s" \1      \.\r\2Forth \what immer einen \cCompiler \wmit an Board und ist \rstackbasierend " >m-scroll
-s" \1      \.\w\2Dadurch kann man \rForth\w in sich \yselbst erweitern\w, ja sogar neue \mSyntaxelemente \whinzufügen " >m-scroll
+s" \1      \.\w\2Dadurch kann man \rForth\w in sich \yselbst erweitern\w, ja sogar neue \mSyntaxelemente \werfinden " >m-scroll
 
 10 gol-line	50 step-break
 separator
-s" \1      \.\r\2Forth \wgibt es ziehmlich wahrscheinlich auch für deinen \yLieblingscontroller! " >m-scroll
-s" \1      \.\w\2Um mehr zu erfahren, frage doch einfach eine der \rKohlenstoffeinheiten\w in meiner Nähe " >m-scroll
+s" \1      \.\r\2Forth \wgibt es ziemlich wahrscheinlich auch auf deinem \yLieblingscontroller! " >m-scroll
+s" \1      \.\w\2Um mehr zu erfahren, frage doch einfach eine der \rKohlenstoffeinheiten\w in meiner Umgebung " >m-scroll
 	;
 
 \ ev - endless
