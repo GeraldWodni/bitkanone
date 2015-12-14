@@ -68,11 +68,7 @@ cols rows * constant leds
 leds 4 * constant led-buffer-size
 cols 4 * constant row-size
 row-size 2/ constant row-size/2
-led-buffer-size 
-compiletoram
-here swap allot
-compiletoflash
-constant led-buffer
+led-buffer-size buffer: led-buffer
 
 \ wave-like pattern
 : buffer-wave
