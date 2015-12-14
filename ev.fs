@@ -63,4 +63,3 @@ s" \1      \.\w\2Um mehr zu erfahren, frage doch einfach eine der \rKohlenstoffe
 		." Human presence detected" cr
 	then ;
 
-init
