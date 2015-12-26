@@ -30,3 +30,5 @@ echo -e "\ncornerstone very-cold\n" >> bitkanone.fs
 cat ev.fs       >> bitkanone.fs
 
 echo -e "\ncornerstone cold\n" >> bitkanone.fs
+
+echo -e "\ninit\n" >>bitkanone.fs
