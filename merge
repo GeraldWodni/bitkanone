@@ -27,6 +27,6 @@ cat pnm.fs	>> bitkanone.fs
 
 echo -e "\ncornerstone very-cold\n" >> bitkanone.fs
 
-cat ev.fs       >> bitkanone.fs
+cat 32c3.fs       >> bitkanone.fs
 
 echo -e "\ncornerstone cold\n" >> bitkanone.fs
