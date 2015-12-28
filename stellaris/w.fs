@@ -73,11 +73,7 @@ compiletoflash
 cols rows * constant leds
 leds 4 * constant led-buffer-size
 cols 4 * constant row-size
-led-buffer-size 
-compiletoram
-here swap allot
-compiletoflash
-constant led-buffer
+led-buffer-size buffer: led-buffer
 
 : buffer-white
         led-buffer led-buffer-size bounds do
