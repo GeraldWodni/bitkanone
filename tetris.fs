@@ -155,6 +155,14 @@ create blocks B-T , B-I , B-LR , B-LL , B-V , B-Z , B-S , B-4 ,
         true
     then ;
 
+: block-left? ( -- )
+    \ keep left bound
+    block-y @ block-first-y - 0 >= ;
+
+: block-right? ( -- )
+    \ keep right bound
+    block-y @ block-last-y + rows <= ;
+
 : game-over? ( -- f )
     false ;
 
@@ -176,12 +184,14 @@ create blocks B-T , B-I , B-LR , B-LL , B-V , B-Z , B-S , B-4 ,
     then flush ;
 
 : left ( -- )
-    
-    block-left ;
+    block-left? if
+        block-left
+    then ;
 
 : right ( -- )
-    block-right ;
-    
+    block-right? if
+        block-right
+    then ;
 
 : block-autopilot ( -- )
     begin
@@ -201,8 +211,8 @@ create blocks B-T , B-I , B-LR , B-LL , B-V , B-Z , B-S , B-4 ,
     
 
 : init-tetris 
+    buffer-off
     next-block block-xy@ draw-block flush
-    ;
-    \ block-autopilot ;
+    block-autopilot ;
 
 init-tetris
