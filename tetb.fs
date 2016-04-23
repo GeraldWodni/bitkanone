@@ -103,6 +103,27 @@ $1F0000 variable block-color
 create blocks B-T , B-I , B-LR , B-LL , B-V , B-Z , B-S , B-4 ,
 8 constant blocks#
 
+B-4 variable current-block
+
+: mat4-xy ( n-x n-y -- x-mask )
+    4 * + bit ;
+
+: mat4-xy? ( x-mat n-x n-y -- f )
+    mat4-xy and 0<> ;
+
+: mat4-xy-set ( x-mat1 n-x n-y -- x-mat2 )
+    mat4-xy or ;
+
+: mat4-rotate ( x-mat1 -- x-mat2 )
+    0
+    4 0 do
+        4 0 do
+            over i j mat4-xy? if
+                j i mat4-xy-set
+            then
+        loop
+    loop nip ;
+
 : draw-block ( block-pattern -- )
     block-buffer cols + 4 - 4 bounds do
         dup $F and      \ get lowest nibble
@@ -130,7 +151,7 @@ create blocks B-T , B-I , B-LR , B-LL , B-V , B-Z , B-S , B-4 ,
     $84 block-buffer 3 + c!
     $80 block-buffer 4 + c!
 
-    B-4 draw-block
+    B-4 mat4-rotate draw-block
 
     tetris()
     ;
