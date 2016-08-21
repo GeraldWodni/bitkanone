@@ -1,3 +1,6 @@
+eraseflash
+
+
 compiletoflash
 
 \ Ports
@@ -22,6 +25,28 @@ $2E constant P2SEL
 $2F constant P2REN
 $42 constant P2SEL2
 
+\ SPI registers
+$78 constant USICTL0
+$79 constant USICTL1
+$7A constant USICKCTL
+$7B constant USICNT
+$7C constant USISRL
+$7D constant USISRH
+
+$78 constant USICTL
+$7A constant USICCTL
+$7C constant USISR
+
+$68 constant UCB0CTL0
+$69 constant UCB0CTL1
+$6A constant UCB0BR0
+$6B constant UCB0BR1
+$6D constant UCB0STAT
+$6E constant UCB0RXBUF
+$6F constant UCB0TXBUF
+$01 constant IE2
+$03 constant IFG2
+
 $4A constant ADC10AE0 \ If you want to use Pins of Port 1 as analog inputs, you have to set the corresponding bits in ADC10AE0 !
 
 : init \ Launchpad hardware initialisations
@@ -33,7 +58,7 @@ $4A constant ADC10AE0 \ If you want to use Pins of Port 1 as analog inputs, you 
 ;
 
 \ Measure Vcc/2 on analog channel 11 with 2.5V reference.
-: vcc. 0  11 analog  204,6 f/ 2 f.n ." V " ; 
+: vcc. 0  11 analog  204,6 f/ 2 f.n ." V " ;
 
 \ Measure temperature on analog channel 10.
 : temp.
@@ -66,7 +91,7 @@ $4A constant ADC10AE0 \ If you want to use Pins of Port 1 as analog inputs, you 
 : pwm ( Duty-Cycle -- ) $174 ! ; \ Sets duty cycle
 
 
-: random ( -- u ) 
+: random ( -- u )
  ( Generiert Zufallszahlen mit dem Rauschen vom Temperatursensor am ADC )
  ( Random numbers with noise of temperature sensor on ADC )
    0
