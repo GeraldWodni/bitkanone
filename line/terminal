@@ -1,0 +1,4 @@
+#!/bin/bash
+
+lsusb
+picocom /dev/ttyACM0 --imap lfcrlf,crcrlf --omap delbs,crlf --send-cmd "ascii-xfr -s -l 250 -n"
