@@ -107,6 +107,9 @@ $4A constant ADC10AE0 \ If you want to use Pins of Port 1 as analog inputs, you 
   does>   begin dup  $1FF and while 1+  repeat eraseflashfrom
 ;
 
+: bounds ( addr n -- addr-end addr-start )
+    over + swap ;
+
 : u.4 ( u -- ) 0 <# # # # # #> type ;
 : u.2 ( u -- ) 0 <# # # #> type ;
 

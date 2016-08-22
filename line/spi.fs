@@ -3,6 +3,14 @@ rewind-to-basis
 
 compiletoflash
 
+1 constant #leds
+#leds 3 * constant #buffer
+#buffer buffer: buffer
+
+$00 buffer c!
+$FF buffer 1+ c!
+$55 buffer 2 + c!
+
 \ initialize UCSI_B0 as SPI Master
 : init-spi ( -- )
     \ 1. Set UCSWRST
@@ -29,12 +37,34 @@ compiletoflash
 
 : >ws ( x -- )
 	8 0 do
-		$8 			\ push "0" ($8) on stack
-		over $80 and 0<> 	\ check msb
-		$E and or 		\ msb=1, push "1" ($E) on stack
-		>spi
-		1 lshift
+            dup $80 and if
+                $E UCB0TXBUF c!
+            else
+                $8 UCB0TXBUF c!
+            then
+            2*
 	loop drop ;
 
+: >wsi ( x -- )
+        dup $80 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
+        dup $40 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
+        dup $20 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
+        dup $10 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
+
+        dup $08 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
+        dup $04 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
+        dup $02 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
+            $01 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then ;
+
+: flush ( -- )
+    buffer #buffer bounds do
+        i c@ >ws
+    loop ;
+
+: flushi ( -- )
+    buffer #buffer bounds do
+        i c@ >wsi
+    loop ;
+
 init-spi
-$00 >ws
+flush
