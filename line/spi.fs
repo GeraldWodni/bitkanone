@@ -120,3 +120,5 @@ $55 buffer 2+ c!
 
 init-spi
 flush
+
+cornerstone cold
