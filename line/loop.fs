@@ -6,28 +6,19 @@ cold
 
 compiletoflash
 
-: green-loop ( -- )
+: looper
     0
     begin
-
-        0   >wsi
-        dup >wsi
-        0   >wsi
-
-        dup >wsi
-        dup >wsi
-        0   >wsi
-
-        dup >wsi
-        0   >wsi
-        0   >wsi
-
-        0   >wsi
-        0   >wsi
-        dup >wsi
-
-        10 ms
+        #leds 0 do
+            dup
+            i $1F * +   \ add phase-offset
+            $7F and     \ restrict brightness to 50%
+            dup $7F swap - \ invert red
+            i rgb-px!   \ store in ith pixel
+        loop
+        flush 10 ms
         1+
     key? until drop ;
+
 init-spi
-green-loop
+looper

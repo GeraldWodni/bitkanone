@@ -3,13 +3,9 @@ rewind-to-basis
 
 compiletoflash
 
-1 constant #leds
+4 constant #leds
 #leds 3 * constant #buffer
 #buffer buffer: buffer
-
-$00 buffer c!
-$FF buffer 1+ c!
-$55 buffer 2+ c!
 
 : buffer-bounds ( -- c-addr-end c-addr-start )
     buffer #buffer bounds ;
@@ -22,14 +18,13 @@ $55 buffer 2+ c!
 
 \ write n-th pixel in buffer
 : rgb-px! ( d-rgb index -- )
-    buffer + rgb! ;
+    3 * buffer + rgb! ;
 
 \ fill buffer with color
 : buffer! ( d-rgb -- )
     buffer-bounds do
         2dup
         i rgb!
-        ." w" i .
     3 +loop 2drop ;
 
 : buffer. ( -- )
@@ -43,6 +38,9 @@ $55 buffer 2+ c!
 
 \ initialize UCSI_B0 as SPI Master
 : init-spi ( -- )
+    \ set clock to 16mhz
+    16mhz
+
     \ 1. Set UCSWRST
     1 UCB0CTL1 c!
 
@@ -65,54 +63,30 @@ $55 buffer 2+ c!
 : >spi ( x -- ) inline
     UCB0TXBUF c! ;
 
+\ write byte (unrolled)
 : >ws ( x -- )
-	8 0 do
-            dup $80 and if
-                $E UCB0TXBUF c!
-            else
-                $8 UCB0TXBUF c!
-            then
-            2*
-	loop drop ;
+        dup $80 and if $E else $8 then >spi
+        dup $40 and if $E else $8 then >spi
+        dup $20 and if $E else $8 then >spi
+        dup $10 and if $E else $8 then >spi
 
-: >wsi ( x -- )
-        dup $80 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
-        dup $40 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
-        dup $20 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
-        dup $10 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
-
-        dup $08 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
-        dup $04 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
-        dup $02 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then
-        dup $01 and if $E UCB0TXBUF c!  else $8 UCB0TXBUF c!  then drop ;
+        dup $08 and if $E else $8 then >spi
+        dup $04 and if $E else $8 then >spi
+        dup $02 and if $E else $8 then >spi
+        dup $01 and if $E else $8 then >spi drop ;
 
 : flush ( -- )
     buffer #buffer bounds do
         i c@ >ws
     loop ;
 
-: flushi ( -- )
-    buffer #buffer bounds do
-        i c@ >wsi
-    loop ;
-
-: flush@ ( -- )
-    buffer #buffer bounds do
-        i @ >wsi
-    loop ;
-
-: flush= ( -- )
-    buffer #buffer bounds do
-        i >wsi
-    loop ;
-
-: f flushi ;
+: f flush ;
 
 \ interaction words
 
 \ fill buffer and flush
 : leds ( d-rgb -- )
-    buffer! flushi ;
+    buffer! flush ;
 
 \ make all leds red
 : r ( -- ) $FF.00.00 leds ;
@@ -129,8 +103,8 @@ $55 buffer 2+ c!
 \ make all leds black
 : off ( -- ) $00.00.00 leds ;
 
-
+16mhz
 init-spi
-f
+r
 
 cornerstone cold
