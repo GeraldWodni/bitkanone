@@ -96,6 +96,18 @@ $55 buffer 2+ c!
         i c@ >wsi
     loop ;
 
+: flush@ ( -- )
+    buffer #buffer bounds do
+        i @ >wsi
+    loop ;
+
+: flush= ( -- )
+    buffer #buffer bounds do
+        i >wsi
+    loop ;
+
+: f flushi ;
+
 \ interaction words
 
 \ fill buffer and flush
@@ -119,6 +131,6 @@ $55 buffer 2+ c!
 
 
 init-spi
-flush
+f
 
 cornerstone cold
