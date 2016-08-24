@@ -28,6 +28,12 @@ compiletoflash
     dup 8 rshift r@ c!  \ green
     $FF and r> 2+ c! ;  \ blue
 
+\ add component wise to led
+: rgb+! ( d-rgb c-addr -- )
+    >r r@ 1+ c+!        \ red
+    dup 8 rshift r@ c+! \ green
+    $FF and r> 2+ c+! ; \ blue
+
 \ write n-th pixel in buffer
 : rgb-px! ( d-rgb index -- )
     led-addr rgb! ;
