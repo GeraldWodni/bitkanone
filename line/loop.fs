@@ -1,24 +1,38 @@
-\ Ramps up the brightnes of the first 4 connected Leds, coloring them Red, Yellow, Green and Blue
-\ (c)copyright 2016 by Gerald Wodni<gerald.wodni@gmail.com>
-
-cold
-
+\  cold
 
 compiletoflash
+0 variable step             \ current program step (two byte values in one word-variable)
+step 1+ constant substep     \ substep for intermix
 
-: looper
-    0
+: step. step c@ u.2 space substep c@ u.4 space buffer.. ;
+
+: green-init
+    #leds 1- 2/ step c!  0 substep c! \ start at stripcenter -1
+    $00.1F.00 buffer!                \ dim lower half
+    #leds #leds 2/ do                 \ full brightness for upper half
+        $00.8F.00 i rgb-px!
+    loop flush ;
+
+: green-step
+     1 step c@ led-addr c+! \ increment step led
+    -1 step c@ #leds/2 led+addr c+! \ decrement end of bright half
+    substep c@ 1+ dup $7F > if
+        cr ." NEW STEP!" step c@ .
+        step c@ 1- dup 0< if #leds 1- then step c!
+        step c@ . cr
+        drop 0
+    then substep c!
+    ;
+    \ step c@ -1 led+buffer c+!
+
+: green-loop
+    init-spi
+    green-init
     begin
-        #leds 0 do
-            dup
-            i $1F * +   \ add phase-offset
-            $7F and     \ restrict brightness to 50%
-            dup $7F swap - \ invert red
-            i rgb-px!   \ store in ith pixel
-        loop
-        flush 10 ms
-        1+
-    key? until drop ;
+        green-step
+        flush
+        \ step. cr
+        100 ms
+    key? until ;
 
-init-spi
-looper
+green-loop

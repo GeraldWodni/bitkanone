@@ -1,11 +1,20 @@
-rewind-to-basis
-
+\ rewind-to-basis
 
 compiletoflash
 
 4 constant #leds
+#leds 2/ constant #leds/2
 #leds 3 * constant #buffer
 #buffer buffer: buffer
+
+\ get index of next led within #leds-range
+: led+ ( n-led0 n-offset -- n-led1 )
+    +                      \ add offset
+    #leds mod               \ bind to range 0..#leds
+    dup 0< if #leds + then ; \ if negative, move into range
+
+: led-addr ( n -- addr ) 3 * buffer + ;
+: led+addr led+ led-addr ;
 
 : buffer-bounds ( -- c-addr-end c-addr-start )
     buffer #buffer bounds ;
@@ -18,7 +27,7 @@ compiletoflash
 
 \ write n-th pixel in buffer
 : rgb-px! ( d-rgb index -- )
-    3 * buffer + rgb! ;
+    led-addr rgb! ;
 
 \ fill buffer with color
 : buffer! ( d-rgb -- )
@@ -27,14 +36,27 @@ compiletoflash
         i rgb!
     3 +loop 2drop ;
 
+\ print buffer in lines with prefixed index
 : buffer. ( -- )
-    base @ hex
+    cr ." ##: RRGGBB"
+    base @ hex 0
     buffer-bounds do
-        i c@ u.2
+        \ show index
+        cr dup u.2 ." : " 1+
         i 1+ c@ u.2
+        i c@ u.2
         i 2+ c@ u.2
-        cr
-    3 +loop base ! ;
+    3 +loop drop base !  ;
+
+\ print buffer in single line
+: buffer.. ( -- )
+    base @ hex 0
+    buffer-bounds do
+        i 1+ c@ u.2
+        i c@ u.2
+        i 2+ c@ u.2
+        bl emit
+    3 +loop drop base !  ;
 
 \ initialize UCSI_B0 as SPI Master
 : init-spi ( -- )
