@@ -63,6 +63,18 @@ $0002 constant CAL_DCO_16MHZ
 : us 0 ?do [ $3C00 , $3C00 , ] loop ;
 : ms 0 ?do 998 us loop ;
 
+\ button
+: init ( -- )
+    8 P1REN cbis! ; \ Pullup for button
+0 variable btn-last
+\ true when button is down
+: pressed? ( -- f ) 8 P1IN c@ and 0= ;
+\ true once when button is pressed
+: button? ( -- f )
+    btn-last c@ 0=
+    pressed?        \ get current state
+    dup btn-last c! \ store current state
+    and ;           \ compare states
 
 : cornerstone ( Name ) ( -- )
   <builds begin here $1FF and while 0 , repeat
@@ -80,7 +92,6 @@ $0002 constant CAL_DCO_16MHZ
                    CAL_BC1_8MHZ  + c@ BCSCTL1 c!
                    $02 BCSCTL2 cbic!  ;          \ reset SMCLK divider to 1
 
-\ TODO: ajust uart speeds, or select different uart clock
 : 16mhz ( -- )
     TAG_DCO_30 dup CAL_DCO_16MHZ + c@ DCOCTL  c! \ set calibrated DCO
                    CAL_BC1_16MHZ + c@ BCSCTL1 c! \ set calibrated BC1

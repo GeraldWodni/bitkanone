@@ -63,4 +63,19 @@ step 1+ constant substep     \ substep for intermix
         \ 10 ms
     key? until ;
 
-green-loop
+: two-loop
+    init-spi
+    begin
+        red-init
+        begin
+            red-step
+            flush
+        button? until
+        green-init
+        begin
+            green-step
+            flush
+        button? until
+    key? until ;
+
+two-loop
