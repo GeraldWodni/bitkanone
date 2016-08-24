@@ -1,4 +1,7 @@
-\ rewind-to-basis
+\ buffered SPI WS2812B driver
+\ (c)copyright 2016 by Gerald Wodni <gerald.wodni@gmail.com> 
+
+\ very-cold
 
 compiletoflash
 
@@ -23,7 +26,7 @@ compiletoflash
 : rgb! ( d-rgb c-addr -- )
     >r r@ 1+ c!         \ red
     dup 8 rshift r@ c!  \ green
-    $FF and r> 2+ c! ; \ blue
+    $FF and r> 2+ c! ;  \ blue
 
 \ write n-th pixel in buffer
 : rgb-px! ( d-rgb index -- )
