@@ -1,0 +1,7 @@
+I am no color expert, but I really do love light effects.
+So do not expect some fancy color theory here, I'm just trying to figure out what looks good and what i might have forgotten about: 
+
+             hue: 0  30    60    90          120  150     180 240 270   300    0
+primary   colors: red                        green            blue             red
+secondary colors:          yellow                         cyan          magenta
+tertiary  colors:    orange      yellow-green     turquise        violet

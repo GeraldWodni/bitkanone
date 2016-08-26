@@ -30,10 +30,18 @@ step 1+ constant substep     \ substep for intermix
     step c@ led-addr rgb+! \ increment step led
     next-substep ;
 
+\ primrary colors: RGB, secondary colors: YCM, terciary colors: 
+
 : red-init ( -- )
     $FF.00.00 $7F.00.00 color-init ;
 
 : red-step ( -- )
+    $01.00.00 $FF.00.00 color-step ;
+
+: orange-init ( -- )
+    $FF.3F.00 $7F.3F.00 color-init ;
+
+: orange-step ( -- )
     $01.00.00 $FF.00.00 color-step ;
 
 : yellow-init ( -- )
@@ -41,6 +49,18 @@ step 1+ constant substep     \ substep for intermix
 
 : yellow-step ( -- )
     $01.01.00 $FF.FF.00 color-step ;
+
+: lime-init ( -- )
+    $3F.FF.00 $3F.7F.00 color-init ;
+
+: lime-step ( -- )
+    $00.01.00 $00.FF.00 color-step ;
+
+: teal-init ( -- )
+    $00.FF.3F $00.7F.3F color-init ;
+
+: teal-step ( -- )
+    $00.01.00 $00.FF.00 color-step ;
 
 : green-init ( -- )
     $00.FF.00 $00.7F.00 color-init ;
@@ -73,11 +93,14 @@ step 1+ constant substep     \ substep for intermix
     $00.00.01 $00.00.FF color-step ;
 
 \ program count and xts
-7 constant #programs
+10 constant #programs
 create programs
     ' red-init , ' red-step ,
+    ' orange-init , ' orange-step ,
     ' yellow-init , ' yellow-step ,
+    ' lime-init , ' lime-step ,
     ' green-init , ' green-step ,
+    ' teal-init , ' teal-step ,
     ' cyan-init , ' cyan-step ,
     ' blue-init , ' blue-step ,
     ' magenta-init , ' magenta-step ,

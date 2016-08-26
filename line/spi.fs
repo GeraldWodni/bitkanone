@@ -137,5 +137,3 @@ compiletoflash
 16mhz
 init-spi
 r
-
-cornerstone cold

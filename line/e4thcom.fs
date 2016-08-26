@@ -3,4 +3,6 @@
 
 #include utils.fs
 #include spi.fs
-#include loop.fs
+#include colors.fs
+\ #include loop.fs
+#include rainbow.fs

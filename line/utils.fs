@@ -84,6 +84,10 @@ $0002 constant CAL_DCO_16MHZ
 : bounds ( addr n -- addr-end addr-start )
     over + swap ;
 
+\ helpers for handling 3 items on stack
+: 3dup >r 2dup r@ -rot r> ;
+: 3drop 2drop drop ;
+
 : u.4 ( u -- ) 0 <# # # # # #> type ;
 : u.2 ( u -- ) 0 <# # # #> type ;
 
@@ -104,5 +108,9 @@ $0002 constant CAL_DCO_16MHZ
 \ update us and ms to be multi-frequency aware
 : us clk-div* us ;
 : ms clk-div* ms ;
+
+\ as no real :noname exists, here is a simple substitute
+: :noname here -1 state ! ;
+: ;noname ret, 0 state ! ; immediate
 
 cornerstone very-cold
