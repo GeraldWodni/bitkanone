@@ -4,5 +4,4 @@
 #include utils.fs
 #include spi.fs
 #include colors.fs
-\ #include loop.fs
-#include rainbow.fs
+#include loop.fs

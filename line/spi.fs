@@ -45,18 +45,6 @@ compiletoflash
         i rgb!
     3 +loop 2drop ;
 
-\ print buffer in lines with prefixed index
-: buffer. ( -- )
-    cr ." ##: RRGGBB"
-    base @ hex 0
-    buffer-bounds do
-        \ show index
-        cr dup u.2 ." : " 1+
-        i 1+ c@ u.2
-        i c@ u.2
-        i 2+ c@ u.2
-    3 +loop drop base !  ;
-
 \ print buffer in single line
 : buffer.. ( -- )
     base @ hex 0

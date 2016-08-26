@@ -6,11 +6,6 @@
 
 compiletoflash
 
-: rgb>crgb ( d-rgb -- r g b )
-    swap \ red is already isolated
-    >r r@ 8 rshift  \ shift green down
-    r> $FF and ;    \ mash blue
-
 : crgb>rgb ( r g b -- d-rgb )
     swap 8 lshift or \ combine blue and green
     swap ; \ add red as upper word
@@ -41,7 +36,7 @@ compiletoflash
     ;
 
 \ hsv to rgb conversion (byte-based)
-: hsv>crgb ( h s v -- r g b )
+: hsv>rgb ( h s v -- d-rgb )
     rot hsv-f-hi \ s v f hi
     case \ s v f
         1 of
@@ -85,9 +80,6 @@ compiletoflash
             3dup hsv-t >r
             hsv-V r> r>
         0
-    endcase ;
-
-: hsv>rgb ( h s v -- d-rgb )
-    hsv>crgb crgb>rgb ;
+    endcase crgb>rgb ;
 
 cornerstone cold

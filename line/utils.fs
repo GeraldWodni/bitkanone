@@ -25,15 +25,6 @@ $2F constant P2REN
 $42 constant P2SEL2
 
 \ SPI registers
-\ $60 constant UCA0CTL0
-\ $61 constant UCA0CTL1
-\ $62 constant UCA0BR0
-\ $63 constant UCA0BR1
-\ $64 constant UCA0MCTL
-\ $65 constant UCA0STAT
-\ $66 constant UCA0RXBUF
-\ $67 constant UCA0TXBUF
-
 $68 constant UCB0CTL0
 $69 constant UCB0CTL1
 $6A constant UCB0BR0
@@ -51,17 +42,8 @@ $0058 constant BCSCTL2
 
 \ calibration registers
 $10F6 constant TAG_DCO_30
-$0007 constant CAL_BC1_8MHZ
-$0006 constant CAL_DCO_8MHZ
 $0003 constant CAL_BC1_16MHZ
 $0002 constant CAL_DCO_16MHZ
-
-\ Busy waits for the given time or slightly more, if interrupts are active.
-\ DCO clock is only accurate to +-3% and varies with Vcc and temperature.
-\ For precise timings, connect a crystal and use timer.
-\ 8 cycles per loop run for 1 us @ 8 MHz.
-: us 0 ?do [ $3C00 , $3C00 , ] loop ;
-: ms 0 ?do 998 us loop ;
 
 \ button
 : init ( -- )
@@ -91,11 +73,6 @@ $0002 constant CAL_DCO_16MHZ
 : u.4 ( u -- ) 0 <# # # # # #> type ;
 : u.2 ( u -- ) 0 <# # # #> type ;
 
-: 8mhz ( -- )
-    TAG_DCO_30 dup CAL_DCO_8MHZ  + c@ DCOCTL  c!
-                   CAL_BC1_8MHZ  + c@ BCSCTL1 c!
-                   $02 BCSCTL2 cbic!  ;          \ reset SMCLK divider to 1
-
 : 16mhz ( -- )
     TAG_DCO_30 dup CAL_DCO_16MHZ + c@ DCOCTL  c! \ set calibrated DCO
                    CAL_BC1_16MHZ + c@ BCSCTL1 c! \ set calibrated BC1
@@ -105,12 +82,8 @@ $0002 constant CAL_DCO_16MHZ
 : clk-div* ( n1 -- n2 )
     BCSCTL2 c@ $02 and if 2* then ;
 
-\ update us and ms to be multi-frequency aware
-: us clk-div* us ;
-: ms clk-div* ms ;
+\ us and ms which are multi-frequency aware
+: us clk-div* 0 ?do [ $3C00 , $3C00 , ] loop ;
+: ms clk-div* 0 ?do 998 us loop ;
 
-\ as no real :noname exists, here is a simple substitute
-: :noname here -1 state ! ;
-: ;noname ret, 0 state ! ; immediate
-
-cornerstone very-cold
+: noop ;

@@ -5,106 +5,78 @@
 
 compiletoflash
 5 variable delay          \ ms between program-steps
+0 variable angle           \ currently hue-angle ( if needed )
 0 variable step             \ current program step (two byte values in one word-variable)
 step 1+ constant substep     \ substep for intermix
 
 : step. step c@ u.2 space substep c@ u.4 space buffer.. ;
 
-: color-init ( d-rgb-bright d-rgb-dim -- )
-    #leds 1- 2/ step c!  0 substep c! \ start at stripcenter -1
-    buffer!                \ dim lower half
-    #leds #leds 2/ do                 \ full brightness for upper half
-        2dup i rgb-px!
-    loop 2drop flush ;
+: hsv-value-init ( hue -- )
+    dup angle !
+    #leds 1- 2/ step c!  0 substep c!   \ start at stripcenter -1
+    dup $FF $7F hsv>rgb buffer!         \ dim lower half
+    #leds #leds 2/ do                   \ full brightness for upper half
+        dup $FF $FF hsv>rgb i rgb-px!
+    loop drop flush ;
 
 : next-substep ( -- )
-    substep c@ 1+ dup $7F > if
-        \ cr ." NEW STEP!" step c@ .
+    substep c@ 1+ dup $7F > if          \ at $80 increment step and reset substep
         step c@ 1- dup 0< if drop #leds 1- then step c!
-        \ step c@ . cr
-        \ drop 0
+        drop 0
     then substep c!  ;
 
-: color-step ( -- )
-    step c@ #leds/2 led+addr rgb+! \ decrement end of bright half
-    step c@ led-addr rgb+! \ increment step led
+: hsv-value-step ( -- )
+    angle @
+    \ decrement end of bright half
+    dup $FF                 \ hue sat
+    $FF substep c@ -        \ value
+    hsv>rgb 
+    step c@ #leds/2 led+    \ index
+    rgb-px!
+
+    \ increment step led
+    $FF                     \ hue sat
+    substep c@ $7F +        \ value 
+    hsv>rgb step c@ rgb-px!
     next-substep ;
 
-\ primrary colors: RGB, secondary colors: YCM, terciary colors: 
+\ hue color init words
+\ primrary colors: RGB, secondary colors: YCM,
+\ terciary colors: orange, lime, teal, violet
+: _red        0 hsv-value-init ;
+: _orange    30 hsv-value-init ;
+: _yellow    60 hsv-value-init ;
+: _lime      90 hsv-value-init ;
+: _green    120 hsv-value-init ;
+: _teal     150 hsv-value-init ;
+: _cyan     180 hsv-value-init ;
+: _blue     240 hsv-value-init ;
+: _violet   270 hsv-value-init ;
+: _magenta  300 hsv-value-init ;
 
-: red-init ( -- )
-    $FF.00.00 $7F.00.00 color-init ;
-
-: red-step ( -- )
-    $01.00.00 $FF.00.00 color-step ;
-
-: orange-init ( -- )
-    $FF.3F.00 $7F.3F.00 color-init ;
-
-: orange-step ( -- )
-    $01.00.00 $FF.00.00 color-step ;
-
-: yellow-init ( -- )
-    $FF.FF.00 $7F.7F.00 color-init ;
-
-: yellow-step ( -- )
-    $01.01.00 $FF.FF.00 color-step ;
-
-: lime-init ( -- )
-    $3F.FF.00 $3F.7F.00 color-init ;
-
-: lime-step ( -- )
-    $00.01.00 $00.FF.00 color-step ;
-
-: teal-init ( -- )
-    $00.FF.3F $00.7F.3F color-init ;
-
-: teal-step ( -- )
-    $00.01.00 $00.FF.00 color-step ;
-
-: green-init ( -- )
-    $00.FF.00 $00.7F.00 color-init ;
-
-: green-step ( -- )
-    $00.01.00 $00.FF.00 color-step ;
-
-: cyan-init ( -- )
-    $00.FF.FF $00.7F.7F color-init ;
-
-: cyan-step ( -- )
-    $00.01.01 $00.FF.FF color-step ;
-
-: blue-init ( -- )
-    $00.00.FF $00.00.7F color-init ;
-
-: blue-step ( -- )
-    $00.00.01 $00.00.FF color-step ;
-
-: magenta-init ( -- )
-    $FF.00.FF $7F.00.7F color-init ;
-
-: magenta-step ( -- )
-    $01.00.01 $FF.00.FF color-step ;
-
-: violet-init ( -- )
-    $3F.00.FF $3F.00.7F color-init ;
-
-: violet-step ( -- )
-    $00.00.01 $00.00.FF color-step ;
+: rainbow-step
+    angle @ 
+    360 #leds /         \ offset per led
+    #leds 0 do
+        2dup i * +      \ get led-hue
+        360 mod         \ limit
+        255 255 hsv>rgb i rgb-px!   \ convert and store
+    loop drop 1+ 360 mod angle ! ;  \ increment hue angle
 
 \ program count and xts
-10 constant #programs
+11 constant #programs
 create programs
-    ' red-init , ' red-step ,
-    ' orange-init , ' orange-step ,
-    ' yellow-init , ' yellow-step ,
-    ' lime-init , ' lime-step ,
-    ' green-init , ' green-step ,
-    ' teal-init , ' teal-step ,
-    ' cyan-init , ' cyan-step ,
-    ' blue-init , ' blue-step ,
-    ' magenta-init , ' magenta-step ,
-    ' violet-init , ' violet-step ,
+    ' noop ,        ' rainbow-step   ,
+    ' _red ,        ' hsv-value-step ,
+    ' _orange ,     ' hsv-value-step ,
+    ' _yellow ,     ' hsv-value-step ,
+    ' _lime ,       ' hsv-value-step ,
+    ' _green ,      ' hsv-value-step ,
+    ' _teal ,       ' hsv-value-step ,
+    ' _cyan ,       ' hsv-value-step ,
+    ' _blue ,       ' hsv-value-step ,
+    ' _violet ,     ' hsv-value-step ,
+    ' _magenta ,    ' hsv-value-step ,
 
 0 variable program-index
 0 variable program      \ xt to current stepper
