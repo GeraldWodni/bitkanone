@@ -40,3 +40,11 @@ $0006 constant CAL_DCO_8MHZ
         i c@ u.2
         i 2+ c@ u.2
     3 +loop drop base !  ;
+
+\ limit rgb value to a component sum below 256
+\ remark: does not work due to non-linear brightness of leds
+: limit ( n-r1 n-g1 n-b1 -- n-r2 n-g2 n-b2 )
+    3dup + + \ get sum
+    >r rot 255 r@ */ -rot
+    swap 255 r@ */ swap
+    255 r> */ ;

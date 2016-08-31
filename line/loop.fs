@@ -5,11 +5,15 @@
 
 compiletoflash
 5 variable delay          \ ms between program-steps
+0 variable hue-start      \ starting hue-angle for hsv-hue-step
 0 variable angle           \ currently hue-angle ( if needed )
 0 variable step             \ current program step (two byte values in one word-variable)
 step 1+ constant substep     \ substep for intermix
 
 : step. step c@ u.2 space substep c@ u.4 space buffer.. ;
+
+: hue-set ( hue -- )
+    $FF $FF hsv>rgb buffer! ;
 
 : hsv-value-init ( hue -- )
     dup angle !
@@ -40,6 +44,13 @@ step 1+ constant substep     \ substep for intermix
     hsv>rgb step c@ rgb-px!
     next-substep ;
 
+: seq>hue ( n-seq -- n-hue )
+    120 mod          \ allow offsets, but clamp them
+    dup 60 > if       \ 2nd sequence is in reverse
+        120 swap -
+    then
+    hue-start @ + 360 mod ;           \ hue-start-offset
+
 \ hue color init words
 \ primrary colors: RGB, secondary colors: YCM,
 \ terciary colors: orange, lime, teal, violet
@@ -54,6 +65,11 @@ step 1+ constant substep     \ substep for intermix
 : _violet   270 hsv-value-init ;
 : _magenta  300 hsv-value-init ;
 
+: _lava       0 hue-start ! ;
+: _neon     240 hue-start ! ;
+: _waves    180 hue-start ! ;
+: _sunset   330 hue-start ! ;
+
 : rainbow-step
     angle @ 
     360 #leds /         \ offset per led
@@ -63,10 +79,42 @@ step 1+ constant substep     \ substep for intermix
         255 255 hsv>rgb i rgb-px!   \ convert and store
     loop drop 1+ 360 mod angle ! ;  \ increment hue angle
 
+: hsv-hue-step ( -- )
+    angle @
+    60 #leds 1 max /
+    #leds 0 do
+        2dup i * +
+        seq>hue
+        255 255 hsv>rgb i rgb-px!   \ convert and store
+    loop drop 1+ 360 mod angle ! ;  \ increment hue angle
+
+\ TODO: fix thunder-init, implement thunder-step with white flashes
+: thunder-init ( -- )
+    _blue
+    $00.00.00 buffer!         \ turn lower half off
+    #leds #leds 2/ do         \ half brightness for upper half
+        $00.00.7F i rgb-px!
+    loop ;
+
+: disco-step
+    \ perform only after n loops
+    substep c@ 1+ dup $3F = if
+        angle @ 251 + 360 mod dup
+        hue-set
+        angle !
+        drop 0
+    then substep c! ;
+
 \ program count and xts
-11 constant #programs
+17 constant #programs
 create programs
+    ' thunder-init ,  ' hsv-value-step ,
+    ' _lava ,       ' hsv-hue-step   ,
+    ' _neon ,       ' hsv-hue-step   ,
+    ' _waves ,      ' hsv-hue-step   ,
+    ' _sunset ,     ' hsv-hue-step   ,
     ' noop ,        ' rainbow-step   ,
+    ' _red ,        ' disco-step     ,
     ' _red ,        ' hsv-value-step ,
     ' _orange ,     ' hsv-value-step ,
     ' _yellow ,     ' hsv-value-step ,
