@@ -14,6 +14,27 @@
 \ $66 constant UCA0RXBUF
 \ $67 constant UCA0TXBUF
 
+$6D constant UCB0STAT
+$01 constant IE2
+$03 constant IFG2
+
+\ port registers
+$21 constant P1OUT
+$23 constant P1IFG
+$24 constant P1IES
+$25 constant P1IE
+
+$2F constant P2REN
+$28 constant P2IN
+$29 constant P2OUT
+$2A constant P2DIR
+$2B constant P2IFG
+$2C constant P2IES
+$2D constant P2IE
+$2E constant P2SEL
+$42 constant P2SEL2
+
+
 $0007 constant CAL_BC1_8MHZ
 $0006 constant CAL_DCO_8MHZ
 

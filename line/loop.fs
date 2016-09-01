@@ -4,7 +4,7 @@
 \  cold
 
 compiletoflash
-5 variable delay          \ ms between program-steps
+100 variable delay          \ ms between program-steps
 0 variable hue-start      \ starting hue-angle for hsv-hue-step
 0 variable angle           \ currently hue-angle ( if needed )
 0 variable step             \ current program step (two byte values in one word-variable)
@@ -70,6 +70,8 @@ step 1+ constant substep     \ substep for intermix
 : _waves    180 hue-start ! ;
 : _sunset   330 hue-start ! ;
 
+: _white $FF.FF.FF buffer! 1 delay ! ;
+
 : rainbow-step
     angle @ 
     360 #leds /         \ offset per led
@@ -108,13 +110,14 @@ step 1+ constant substep     \ substep for intermix
 \ program count and xts
 17 constant #programs
 create programs
-    ' thunder-init ,  ' hsv-value-step ,
+    ' noop ,        ' rainbow-step   ,
+    \ ' thunder-init ,  ' hsv-value-step ,
     ' _lava ,       ' hsv-hue-step   ,
     ' _neon ,       ' hsv-hue-step   ,
     ' _waves ,      ' hsv-hue-step   ,
     ' _sunset ,     ' hsv-hue-step   ,
-    ' noop ,        ' rainbow-step   ,
     ' _red ,        ' disco-step     ,
+    ' _white ,      ' noop           ,
     ' _red ,        ' hsv-value-step ,
     ' _orange ,     ' hsv-value-step ,
     ' _yellow ,     ' hsv-value-step ,
@@ -130,6 +133,8 @@ create programs
 0 variable program      \ xt to current stepper
 
 : next-program ( -- )
+    \ TODO: linear interpolation between two hue steps?
+    100 delay !
     program-index @ 1+  \ increment program-index
     #programs mod
     dup program-index !
@@ -151,4 +156,5 @@ create programs
         next-program
     key? until ;
 
-looper
+: flush-keys begin key? while key drop repeat ;
+: init init ." Servus!" flush-keys looper ;

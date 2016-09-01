@@ -5,35 +5,18 @@ compiletoflash
 \ unwanted definitions are commented out to save precious flash for animations
 \ Ports
 $20 constant P1IN
-$21 constant P1OUT
 $22 constant P1DIR
-$23 constant P1IFG
-$24 constant P1IES
-$25 constant P1IE
 $26 constant P1SEL
 $27 constant P1REN
 $41 constant P1SEL2
-
-$28 constant P2IN
-$29 constant P2OUT
-$2A constant P2DIR
-$2B constant P2IFG
-$2C constant P2IES
-$2D constant P2IE
-$2E constant P2SEL
-$2F constant P2REN
-$42 constant P2SEL2
 
 \ SPI registers
 $68 constant UCB0CTL0
 $69 constant UCB0CTL1
 $6A constant UCB0BR0
 $6B constant UCB0BR1
-$6D constant UCB0STAT
 $6E constant UCB0RXBUF
 $6F constant UCB0TXBUF
-$01 constant IE2
-$03 constant IFG2
 
 \ clock control
 $0056 constant DCOCTL
@@ -47,16 +30,21 @@ $0002 constant CAL_DCO_16MHZ
 
 \ button
 : init ( -- )
-    8 P1REN cbis! ; \ Pullup for button
+    $30 P1REN cbis! ; \ Pullup for button
 0 variable btn-last
 \ true when button is down
-: pressed? ( -- f ) 8 P1IN c@ and 0= ;
+: pressed? ( mask -- f ) P1IN c@ and 0= ;
 \ true once when button is pressed
 : button? ( -- f )
     btn-last c@ 0=
-    pressed?        \ get current state
+    $10 pressed?    \ get current state
     dup btn-last c! \ store current state
     and ;           \ compare states
+: button2? ( -- f )
+    btn-last 1+ c@ 0=
+    $20 pressed?
+    dup btn-last 1+ c!
+    and ;
 
 : cornerstone ( Name ) ( -- )
   <builds begin here $1FF and while 0 , repeat

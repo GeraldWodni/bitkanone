@@ -5,7 +5,7 @@
 
 compiletoflash
 
-4 constant #leds
+25 constant #leds
 #leds 2/ constant #leds/2
 #leds 3 * constant #buffer
 #buffer buffer: buffer
