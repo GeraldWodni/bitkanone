@@ -11,7 +11,10 @@ compiletoflash
     swap ; \ add red as upper word
 
 \ sector size 60 = 360 full circle, 43 = 255 full circle
-60 constant hsv-sector
+$FF constant hue-sector
+hue-sector 6 * constant hue-max
+: >hue ( n -- n-hue-sector-start ) 1-foldable
+    hue-sector 60 */ ;
 
 \ p, q, t and V as color parts 
 : hsv-p ( s v f -- p )
@@ -30,8 +33,8 @@ compiletoflash
 
 \ sector and remainder
 : hsv-f-hi ( h -- f hi )
-    hsv-sector /mod >r
-    255 * hsv-sector /
+    hue-sector /mod >r
+    255 * hue-sector /
     r>
     ;
 

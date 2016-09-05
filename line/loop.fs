@@ -4,7 +4,7 @@
 \  cold
 
 compiletoflash
-100 variable delay          \ ms between program-steps
+25 variable delay          \ ms between program-steps
 0 variable hue-start      \ starting hue-angle for hsv-hue-step
 0 variable angle           \ currently hue-angle ( if needed )
 0 variable step             \ current program step (two byte values in one word-variable)
@@ -16,7 +16,7 @@ step 1+ constant substep     \ substep for intermix
     $FF $FF hsv>rgb buffer! ;
 
 : hsv-value-init ( hue -- )
-    dup angle !
+    >hue dup angle !
     #leds 1- 2/ step c!  0 substep c!   \ start at stripcenter -1
     dup $FF $7F hsv>rgb buffer!         \ dim lower half
     #leds #leds 2/ do                   \ full brightness for upper half
@@ -45,11 +45,11 @@ step 1+ constant substep     \ substep for intermix
     next-substep ;
 
 : seq>hue ( n-seq -- n-hue )
-    120 mod          \ allow offsets, but clamp them
-    dup 60 > if       \ 2nd sequence is in reverse
-        120 swap -
+    hue-sector 2* mod          \ allow offsets, but clamp them
+    dup hue-sector > if       \ 2nd sequence is in reverse
+        hue-sector 2* swap -
     then
-    hue-start @ + 360 mod ;           \ hue-start-offset
+    hue-start @ + hue-max mod ;           \ hue-start-offset
 
 \ hue color init words
 \ primrary colors: RGB, secondary colors: YCM,
@@ -65,30 +65,30 @@ step 1+ constant substep     \ substep for intermix
 : _violet   270 hsv-value-init ;
 : _magenta  300 hsv-value-init ;
 
-: _lava       0 hue-start ! ;
-: _neon     240 hue-start ! ;
-: _waves    180 hue-start ! ;
-: _sunset   330 hue-start ! ;
+: _lava       0 >hue hue-start ! ;
+: _neon     240 >hue hue-start ! ;
+: _waves    180 >hue hue-start ! ;
+: _sunset   330 >hue hue-start ! ;
 
 : _white $FF.FF.FF buffer! 1 delay ! ;
 
 : rainbow-step
     angle @ 
-    360 #leds /         \ offset per led
+    hue-max #leds /         \ offset per led
     #leds 0 do
         2dup i * +      \ get led-hue
-        360 mod         \ limit
+        hue-max mod         \ limit
         255 255 hsv>rgb i rgb-px!   \ convert and store
-    loop drop 1+ 360 mod angle ! ;  \ increment hue angle
+    loop drop 1+ hue-max mod angle ! ;  \ increment hue angle
 
 : hsv-hue-step ( -- )
     angle @
-    60 #leds 1 max /
+    hue-sector #leds 1 max /
     #leds 0 do
         2dup i * +
         seq>hue
         255 255 hsv>rgb i rgb-px!   \ convert and store
-    loop drop 1+ 360 mod angle ! ;  \ increment hue angle
+    loop drop 1+ hue-max mod angle ! ;  \ increment hue angle
 
 \ TODO: fix thunder-init, implement thunder-step with white flashes
 : thunder-init ( -- )
@@ -100,8 +100,8 @@ step 1+ constant substep     \ substep for intermix
 
 : disco-step
     \ perform only after n loops
-    substep c@ 1+ dup $3F = if
-        angle @ 251 + 360 mod dup
+    substep c@ 1+ dup $10 = if
+        angle @ 251 >hue + hue-max mod dup
         hue-set
         angle !
         drop 0
@@ -134,7 +134,7 @@ create programs
 
 : next-program ( -- )
     \ TODO: linear interpolation between two hue steps?
-    100 delay !
+    25 delay !
     program-index @ 1+  \ increment program-index
     #programs mod
     dup program-index !

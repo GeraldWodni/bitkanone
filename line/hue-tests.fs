@@ -89,14 +89,20 @@ $FF constant hsv-sector
     endcase  ;
 
 : h dup u.4 space space $FF $FF hsv>rgb >r >r u.2 space r> r> swap u.2 space u.2 cr ;
-: ht do i h loop ;
+: ht 3 + dup 5 - do i h loop ;
 : htt
     ." red" cr
-    4 0 ht
+    2 ht
     ." yellow" cr
-    $104 $FC ht
+    $FF ht
     ." green" cr
-    $204 $1FC ht ;
+    $1FE ht
+    ." cyan" cr
+    $2FD ht
+    ." blue" cr
+    $3FC ht
+    ." magenta" cr
+    $4FB ht ;
 htt
 
 : col= ( n-r1 n-g1 n-b1 n-r2 n-g2 n-b2 -- f ) 
@@ -115,6 +121,7 @@ htt
     then ;
     
 : tester
+    ." -=Test Colors =-" cr
     $100 0 do
         i dup $FF $FF hsv>rgb
         $FF i 0 col-check
@@ -134,8 +141,13 @@ htt
         i $4FB + dup $FF $FF hsv>rgb
         $FF 0 $FF i - col-check
     loop
+    ." -=Test Black=-" cr
+    $FF 6 * 0 do
+        i $FF $0  hsv>rgb $0 $0 $0 col= 0= if
+            ." Black error on " i . cr
+        then
+    loop
     ;
 tester
 
 \ problem: 256 works correctly on PC, check for overflow in math!
-bye
