@@ -19,7 +19,7 @@ minutes !
 \ open terminal
 terminal-filename w/o open-file throw constant terminal
 include serial.fs
-B1152000 terminal set-baud
+B115200 terminal set-baud
 
 \ writers
 : $>terminal ( c-addr n -- )
@@ -33,7 +33,7 @@ B1152000 terminal set-baud
     begin
         [: ." dup " minutes @ . ." countdown-step" cr ;] >terminal
         minutes @ . cr
-        3000 ms
+        60000 ms
         minutes @ 1- dup minutes ! 0=
     until ;
 
