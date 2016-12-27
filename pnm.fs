@@ -44,18 +44,19 @@
     ;
 
 \ 3 pixels (RGB)
-pnm-here
-P3
-# hallo
-3 1
-255
-255
-0
-0
-1
-255
-1
-2
-2
-255
+\ TODO: will not work with e4thcom.fs
+\ pnm-here
+\ P3
+\ # hallo
+\ 3 1
+\ 255
+\ 255
+\ 0
+\ 0
+\ 1
+\ 255
+\ 1
+\ 2
+\ 2
+\ 255
 

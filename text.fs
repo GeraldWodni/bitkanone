@@ -1,7 +1,7 @@
 \ High-Level Display interface: Fonts & Images
 \ (c)copyright 2014 by Gerald Wodni
 
-raw \ clear all until ws2812
+\ raw \ clear all until ws2812
 
 
 

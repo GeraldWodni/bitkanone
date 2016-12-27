@@ -2,7 +2,7 @@
 \ (c)copyright 2014 by Gerald Wodni <gerald.wodni@gmail.com>
 
 
-rewind-ssi \ clear until ws2812
+\ rewind-ssi \ clear until ws2812
 
 
 compiletoflash

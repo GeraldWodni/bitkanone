@@ -127,5 +127,3 @@ $400FE608 constant RCGCGPIO     ( GPIO Run Mode Clock Gating Control )
 
 cornerstone rewind-ssi
 
-init-ssi-2
-$8EE8 >ssi

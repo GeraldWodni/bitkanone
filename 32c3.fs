@@ -1,7 +1,7 @@
 \ (c)copyright 2015 by Gerald Wodni
 \ 32C3 Hamburg greeting
 
-very-cold
+\ very-cold
 
 
 compiletoflash
