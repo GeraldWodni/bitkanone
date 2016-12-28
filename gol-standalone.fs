@@ -1,7 +1,7 @@
 \ (c)copyright 2014 by Gerald Wodni
 \ Standalone GOL Animations
 
-gol
+\ gol
 
 compiletoflash
 

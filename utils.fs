@@ -45,3 +45,7 @@
 : free-flash
 	compiletoflash
 	$40000 here - u. ;
+
+: between ( n-val n-min n-max-1 -- f )
+	>r over <=
+	swap r> < and ;

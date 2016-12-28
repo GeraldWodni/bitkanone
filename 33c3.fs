@@ -1,4 +1,4 @@
-\ (c)copyright 2015 by Gerald Wodni
+\ (c)copyright 2016 by Gerald Wodni
 \ 32C3 Hamburg greeting
 
 \ very-cold
@@ -18,9 +18,7 @@ compiletoflash
 	off 1500 ms ;
 
 : separator
-	black-break
-	clear s" \1\.\c *\y\2 \1*\m\2 \1*" markup flush 2500 ms
-	black-break ;
+        forth flush 15000 ms ;
 	
 : ev ( -- )
 

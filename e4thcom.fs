@@ -10,6 +10,7 @@ compiletoflash
 
 #include ws2812.fs
 #include random.fs
+#include turtle.fs
 
 create 8px
 #include data/8px.fs
@@ -26,7 +27,8 @@ cornerstone raw
 
 cornerstone very-cold
 
-#include 32c3.fs
+#include logo.fs
+#include 33c3.fs
 
 cornerstone cold
 

@@ -96,7 +96,13 @@ led-buffer-size buffer: led-buffer
 	cols * + ;
 
 : xy! ( x-color n-x n-y -- )
-	led-xy led-n! ;
+	over 0 cols between
+	over 0 rows between
+	and if			\ only draw in buffer region
+		led-xy led-n!
+	else
+		2drop
+	then ;
 
 : xy@ ( n-x n-y -- x-color )
 	led-xy led-n @ ;
