@@ -18,7 +18,9 @@ compiletoflash
 	off 1500 ms ;
 
 : separator
-        forth flush 15000 ms ;
+        forth flush 15000 ms
+        mirror 1000 ms
+        mirror 3000 ms ;
 	
 : ev ( -- )
 
@@ -60,5 +62,3 @@ s" \1      \.\w\2If you want to know more, ask one of the \rcarbon units \won th
 		$3F0000 >rgb
 		." Human presence detected" cr
 	then ;
-
-init

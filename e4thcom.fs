@@ -27,6 +27,7 @@ cornerstone raw
 
 cornerstone very-cold
 
+#include anim.fs
 #include logo.fs
 #include 33c3.fs
 
