@@ -18,9 +18,9 @@ compiletoflash
 	off 1500 ms ;
 
 : separator
-        forth flush 15000 ms
-        mirror 1000 ms
-        mirror 3000 ms ;
+        forth flush 5000 ms
+        around
+        forth flush 5000 ms ;
 	
 : ev ( -- )
 
